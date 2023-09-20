@@ -4,7 +4,8 @@
 #include <time.h>
 
 double microsegundos(){
-    printf("probando")
+    printf("probando");
+    printf("probando otra vez");
     struct timeval t;
     if(gettimeofday(&t,NULL)<0)
         return 0.0;
