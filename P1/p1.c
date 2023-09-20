@@ -59,7 +59,7 @@ void listar_vector(int v[],int n){
 
 }
 void test1(){
-    int i, n=5;
+    int i, j, n=5;
     int v[][5]= {
             {-9, 2,  -5, -4, 6},
             {4,  0,  9,  2,  5},
@@ -68,6 +68,14 @@ void test1(){
             {15, -2, -5, -4, 16},
             {7,  -5, 6,  7,  -7}
     };
+    printf("secuencia\t\tresultado\n");
+    for(i = 0; i < 6; i++){
+        printf("\n");
+        for(j = 0; j < n; j++){
+            printf("%d,", v[i][j]);
+        }
+        printf("\t%d", sumaSubMAx1(v, 6));
+    }
 
 
 }
@@ -87,7 +95,7 @@ void test2(){
 }
 int main(){
     inicializar_semilla();
-    //test1();
-    test2();
+    test1();
+    //test2();
     return 0;
 }
