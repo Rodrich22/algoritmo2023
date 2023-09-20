@@ -70,7 +70,7 @@ void test1(){
 void test2(){
     int i,a,b;
     int v[9];
-    printf("hola");
+    printf("hola--");
     printf("test\n");
     printf("%33s%15s%15s\n", "", "\t\t\t\t\t\tsumaSubMax1", "\tsumaSubMax2");
     for (i = 0;  i<10 ;i++) {
