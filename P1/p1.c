@@ -22,12 +22,12 @@ void aleatorio(int v[],int n){
         v[i]= (rand()%m) -n; //se generan numeros pseudoaleatorios entre -n y +n
     }
 }
-int sumaSubMAx1(int v[] , int n){ //On2
+int sumaSubMax1(int v[] , int n){ //On2
     int i,j;
     int sumaMAx=0,estaSuma;
-    for (i = 0; i < n ; ++i) {
+    for (i = 0; i < n ; i++) {
         estaSuma = 0;
-        for (j = i ; j < n ; ++j) {
+        for (j = i ; j < n ; j++) {
             estaSuma = estaSuma + v[j];
             if(estaSuma > sumaMAx){
                 sumaMAx = estaSuma;
@@ -37,58 +37,56 @@ int sumaSubMAx1(int v[] , int n){ //On2
     return sumaMAx;
 }
 int sumaSubMax2(int v[], int n){
-    int i,j;
+    int j;
     int estaSuma=0, sumaMax = 0;
     for (j = 0; j <  n; ++j) {
-        estaSuma = estaSuma + v[j];
-        if(estaSuma > sumaMax){
+        estaSuma += v[j];
+        if(estaSuma > sumaMax)
             sumaMax = estaSuma;
-        }else if( estaSuma < 0){
+        else if( estaSuma < 0)
             estaSuma = 0;
-        }
     }
     return sumaMax;
 }
 void listar_vector(int v[],int n){
-	
+	int i;
 	printf("[ ");
-	for(int i=0;i<n;i++){
+	for(i=0;i<n;i++){
 		printf("%d\t",v[i]);
 		}
 	printf("]");   
 
 }
 void test1(){
-    int i, j, n=5;
-    int v[][5]= {
-            {-9, 2,  -5, -4, 6},
-            {4,  0,  9,  2,  5},
-            {-2, -1, -9, -7, -1},
-            {9,  -2, 1,  -7, -8},
-            {15, -2, -5, -4, 16},
-            {7,  -5, 6,  7,  -7}
-    };
-    printf("secuencia\t\tresultado\n");
-    for(i = 0; i < 6; i++){
-        printf("\n");
+    int i = 0, j, n = 5;
+    int aux[n];
+    int v[] =
+            {-9, 2, -5, -4, 6,
+             4, 0, 9, 2, 5,
+             -2, -1, -9, -7, -1,
+             9, -2, 1, -7, -8,
+             15, -2, -5, -4, 16,
+             7, -5, 6, 7, -7};
+
+    printf("\tsecuencia\t\tresultado\n");
+    while(i<28){
         for(j = 0; j < n; j++){
-            printf("%d,", v[i][j]);
+            aux[j] = v[i];
+            i++;
         }
-        printf("\t%d", sumaSubMAx1(v, 6));
+        listar_vector(aux, n);
+        printf("\t%d\n", sumaSubMax1(aux, n));
     }
-
-
 }
 void test2(){
     int i,a,b;
     int v[9];
-    printf("hola--");
     printf("test\n");
     printf("%33s%15s%15s\n", "", "\t\t\t\t\t\tsumaSubMax1", "\tsumaSubMax2");
     for (i = 0;  i<10 ;i++) {
         aleatorio(v,9);
         listar_vector(v,9);
-        a= sumaSubMAx1(v,9);
+        a= sumaSubMax1(v,9);
         b= sumaSubMax2(v,9);
         printf("%15d%15d\n",a,b);
     }
