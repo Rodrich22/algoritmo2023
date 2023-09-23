@@ -5,6 +5,7 @@
 #include <math.h>
 #include <string.h>
 
+
 double microsegundos(){
     struct timeval t;
     if(gettimeofday(&t,NULL)<0)
@@ -53,13 +54,7 @@ void inicializar_semilla(){
     srand(time(NULL));
     /*se establece la semilla de una nueva serie de enteros pseudo-aleatorios*/
 }
-void aleatorio(int v[],int n){
-    int i, m=2*n+1;
-    for (i = 0;  i < n; i++) {
-        v[i]= (rand()%m) -n; //se generan numeros pseudoaleatorios entre -n y +n
-    }
-}
-int sumaSubMax1(int v[] , int n){ //On2
+int sumaSubMax1(const int v[] , int n){ //On2
     int i,j;
     int sumaMAx=0,estaSuma;
     for (i = 0; i < n ; i++) {
@@ -86,25 +81,36 @@ int sumaSubMax2(int v[], int n){
     return sumaMax;
 }
 void listar_vector(int v[],int n){
-	int i;
-	printf("[");
-	for(i=0;i<n;i++){
-		printf("%5d\t",v[i]);
-		}
-	printf("]");   
+    int i;
+    printf("[");
+    for(i=0;i<n;i++){
+        printf("%5d\t",v[i]);
+    }
+    printf("]");
+}
+void aleatorio(int v[],int n){
+    int i, m=2*n+1;
+    for (i = 0;  i < n; i++) {
+        v[i]= (rand()%m) -n; //se generan numeros pseudoaleatorios entre -n y +n
+    }
+
 
 }
-
 void sum1 (){
 
+    int n = 2;
+    int *v;
     double t, t1, t2, cInf, cota, cSup;
     int K = 1000, tmenor500 = 0;
 
-    for (int i = 1000; i <= 100000000; i = i * 10){
-
+    for (int i = 0; i <=4; i++){
+        v = malloc(sizeof(int) * n);
+        aleatorio(v,n);
+        printf("\n");
+        listar_vector(v, n);
         t1 = microsegundos();
         sumaSubMax1(v,n);
-
+        n *= 2;
         t2 = microsegundos();
 
         t = t2 - t1;
@@ -122,15 +128,19 @@ void sum1 (){
 
             tmenor500 = 1;
         }
+        free(v);
+        //printf("%d\t", n);
 
-        cInf = t / i * log(i);
+        /*cInf = t / i * log(i);
         cota = t / pow(i,2);
         cSup = t / pow(i,1.5) ;
+         */
 
-        imprimirFila(tmenor500, i, t, cInf, cota, cSup);
+        //imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
 }
+
 void test1(){
     int i = 0, j, n = 5;
     int aux[n];
@@ -166,11 +176,12 @@ void test2(){
     }
 }
 int main(){
-    inicializar_semilla();
 
+    inicializar_semilla();
     imprimirTitulo(1);
 
     sum1();
+
     //test1();
     //test2();
     return 0;
