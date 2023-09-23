@@ -98,16 +98,16 @@ void aleatorio(int v[],int n){
 }
 void sum1 (){
 
-    int n = 2;
+    int n = 250;
     int *v;
     double t, t1, t2, cInf, cota, cSup;
     int K = 1000, tmenor500 = 0;
 
-    for (int i = 0; i <=4; i++){
+    for (int i = 0; i <=7; i++){
         v = (int *)malloc(sizeof(int) * n);
         aleatorio(v,n);
-        printf("\n");
-        listar_vector(v, n);
+       // printf("\n");
+     //   listar_vector(v, n);
         t1 = microsegundos();
         sumaSubMax1(v,n);
         n *= 2;
@@ -131,12 +131,12 @@ void sum1 (){
         free(v);
         //printf("%d\t", n);
 
-        /*cInf = t / i * log(i);
-        cota = t / pow(i,2);
-        cSup = t / pow(i,1.5) ;
-         */
+        cInf = t / pow(n,1.8);
+        cota = t / pow(n,2);
+        cSup = t / pow(n,2.2) ;
 
-        //imprimirFila(tmenor500, n, t, cInf, cota, cSup);
+
+        imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
 }
