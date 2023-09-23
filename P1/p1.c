@@ -4,8 +4,6 @@
 #include <time.h>
 
 double microsegundos(){
-    printf("probando");
-    printf("probando otra vez");
     struct timeval t;
     if(gettimeofday(&t,NULL)<0)
         return 0.0;
@@ -50,9 +48,9 @@ int sumaSubMax2(int v[], int n){
 }
 void listar_vector(int v[],int n){
 	int i;
-	printf("[ ");
+	printf("[");
 	for(i=0;i<n;i++){
-		printf("%d\t",v[i]);
+		printf("%5d\t",v[i]);
 		}
 	printf("]");   
 
@@ -67,21 +65,21 @@ void test1(){
              9, -2, 1, -7, -8,
              15, -2, -5, -4, 16,
              7, -5, 6, 7, -7};
-
-    printf("\tsecuencia\t\tresultado\n");
+    printf("\n%*s--------%*s%*s--------\n\n",7,"",15,"Test 1",10,"");
+    printf("\t%*s\t%*s\n",17,"Secuencia",25,"Resultado");
     while(i<28){
         for(j = 0; j < n; j++){
             aux[j] = v[i];
             i++;
         }
         listar_vector(aux, n);
-        printf("\t%d\n", sumaSubMax1(aux, n));
+        printf("\t%5d\n", sumaSubMax1(aux, n));
     }
 }
 void test2(){
     int i,a,b;
     int v[9];
-    printf("test\n");
+    printf("\n%*s--------%*s%*s--------\n\n",30,"",15,"Test 2",10,"");
     printf("%33s%15s%15s\n", "", "\t\t\t\t\t\tsumaSubMax1", "\tsumaSubMax2");
     for (i = 0;  i<10 ;i++) {
         aleatorio(v,9);
@@ -94,6 +92,6 @@ void test2(){
 int main(){
     inicializar_semilla();
     test1();
-    //test2();
+    test2();
     return 0;
 }
