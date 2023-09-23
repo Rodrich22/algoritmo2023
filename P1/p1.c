@@ -104,7 +104,7 @@ void sum1 (){
     int K = 1000, tmenor500 = 0;
 
     for (int i = 0; i <=4; i++){
-        v = malloc(sizeof(int) * n);
+        v = (int *)malloc(sizeof(int) * n);
         aleatorio(v,n);
         printf("\n");
         listar_vector(v, n);
