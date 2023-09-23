@@ -2,12 +2,51 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
+#include <string.h>
 
 double microsegundos(){
     struct timeval t;
     if(gettimeofday(&t,NULL)<0)
         return 0.0;
     return (t.tv_usec + t.tv_sec * 1000000.0);
+}
+/*
+Funcion para imprimir los resultados en la tabla
+*/
+void imprimirFila(int k, int n, double t, double cI, double c, double cS){
+
+    char as;
+
+    if (k == 1)
+        as = '*';
+    else
+        as = '-';
+
+    printf("%12d%15.3f%15.6f%15.6f%15.6f%5c\n", n, t, cI, c, cS, as);
+
+}
+
+/*
+Funcion para imprimir el titulo de la tabla
+*/
+void imprimirTitulo(int i){
+
+    char s[12];
+    char t[] = "Tiempo";
+    char cI[] = "Cota Inf.";
+    char c[] = "Cota";
+    char cS[] = "Cota Sup.";
+
+    if (i == 1)
+        strcpy(s, "SumaMAx1");
+    else if (i == 2)
+        strcpy(s, "SumaMAx2");
+
+    printf("\n--------%*s%*s--------\n",40,s,25,"");
+
+    printf("%10s%17s%15s%15s%15s%5s\n", "n", t, cI , c, cS, "K");
+
 }
 
 void inicializar_semilla(){
@@ -55,6 +94,43 @@ void listar_vector(int v[],int n){
 	printf("]");   
 
 }
+
+void sum1 (){
+
+    double t, t1, t2, cInf, cota, cSup;
+    int K = 1000, tmenor500 = 0;
+
+    for (int i = 1000; i <= 100000000; i = i * 10){
+
+        t1 = microsegundos();
+        sumaSubMax1(v,n);
+
+        t2 = microsegundos();
+
+        t = t2 - t1;
+
+        if (t < 500.0){
+
+            t1 = microsegundos();
+
+            for (int k = 0; k < K; k++)
+                sumaSubMax1(v,n);
+
+            t2 = microsegundos();
+
+            t = (t2 - t1) / K;
+
+            tmenor500 = 1;
+        }
+
+        cInf = t / i * log(i);
+        cota = t / pow(i,2);
+        cSup = t / pow(i,1.5) ;
+
+        imprimirFila(tmenor500, i, t, cInf, cota, cSup);
+        tmenor500 = 0;
+    }
+}
 void test1(){
     int i = 0, j, n = 5;
     int aux[n];
@@ -91,7 +167,11 @@ void test2(){
 }
 int main(){
     inicializar_semilla();
-    test1();
-    test2();
+
+    imprimirTitulo(1);
+
+    sum1();
+    //test1();
+    //test2();
     return 0;
 }
