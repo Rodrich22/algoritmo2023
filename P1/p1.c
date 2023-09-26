@@ -114,8 +114,8 @@ void sum1 (void(*func)(int [],int),double x,double y,double z){
        // printf("\n");
      //   listar_vector(v, n);
         t1 = microsegundos();
-//        func(v,n);
-        sumaSubMax1(v,n);
+        func(v,n);
+//        sumaSubMax1(v,n);
         n *= 2;
         t2 = microsegundos();
 
@@ -126,8 +126,8 @@ void sum1 (void(*func)(int [],int),double x,double y,double z){
             t1 = microsegundos();
 
             for (int k = 0; k < K; k++)
-//                func(v,n);
-                sumaSubMax1(v,n);
+                func(v,n);
+//                sumaSubMax1(v,n);
 
             t2 = microsegundos();
 
