@@ -96,7 +96,7 @@ void aleatorio(int v[],int n){
 
 
 }
-void sum1 (){
+void sum1 (void(*func)(int [],int),int x,int y,int z){
 
     int n = 250;
     int *v;
@@ -109,7 +109,8 @@ void sum1 (){
        // printf("\n");
      //   listar_vector(v, n);
         t1 = microsegundos();
-        sumaSubMax1(v,n);
+        func(v,n);
+        //sumaSubMax1(v,n);
         n *= 2;
         t2 = microsegundos();
 
@@ -120,7 +121,8 @@ void sum1 (){
             t1 = microsegundos();
 
             for (int k = 0; k < K; k++)
-                sumaSubMax1(v,n);
+                func(v,n);
+                //sumaSubMax1(v,n);
 
             t2 = microsegundos();
 
@@ -131,10 +133,9 @@ void sum1 (){
         free(v);
         //printf("%d\t", n);
 
-        cInf = t / pow(n,1.8);
-        cota = t / pow(n,2);
-        cSup = t / pow(n,2.2) ;
-
+        cInf = t / pow(n,x);
+        cota = t / pow(n,y);
+        cSup = t / pow(n,z) ;
 
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
@@ -180,7 +181,10 @@ int main(){
     inicializar_semilla();
     imprimirTitulo(1);
 
-    sum1();
+    sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2);
+    imprimirTitulo(2);
+    printf("\n");
+    sum1((void (*)(int *, int)) sumaSubMax2,1,2,1.9);
 
     //test1();
     //test2();
