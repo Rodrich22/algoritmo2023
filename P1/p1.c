@@ -96,11 +96,16 @@ void aleatorio(int v[],int n){
 
 
 }
-void sum1 (void(*func)(int [],int),int x,int y,int z){
+void imprimirCotas(int *n, double *x,double *y,double *z,double *t,double *cInf,double *cota,double *cSup){
+    *cInf = *t / pow(*n,*x);
+    *cota = *t / pow(*n,*y);
+    *cSup = *t / pow(*n,*z) ;
+}
+void sum1 (void(*func)(int [],int),double x,double y,double z){
 
     int n = 250;
     int *v;
-    double t, t1, t2, cInf, cota, cSup;
+    double t, t1, t2, cInf=0, cota=0, cSup=0;
     int K = 1000, tmenor500 = 0;
 
     for (int i = 0; i <=7; i++){
@@ -109,8 +114,8 @@ void sum1 (void(*func)(int [],int),int x,int y,int z){
        // printf("\n");
      //   listar_vector(v, n);
         t1 = microsegundos();
-        func(v,n);
-        //sumaSubMax1(v,n);
+//        func(v,n);
+        sumaSubMax1(v,n);
         n *= 2;
         t2 = microsegundos();
 
@@ -121,8 +126,8 @@ void sum1 (void(*func)(int [],int),int x,int y,int z){
             t1 = microsegundos();
 
             for (int k = 0; k < K; k++)
-                func(v,n);
-                //sumaSubMax1(v,n);
+//                func(v,n);
+                sumaSubMax1(v,n);
 
             t2 = microsegundos();
 
@@ -132,15 +137,16 @@ void sum1 (void(*func)(int [],int),int x,int y,int z){
         }
         free(v);
         //printf("%d\t", n);
-
-        cInf = t / pow(n,x);
-        cota = t / pow(n,y);
-        cSup = t / pow(n,z) ;
-
+         imprimirCotas(&n,&x,&y,&z,&t,&cInf,&cota,&cSup);
+//        cInf = t / pow(n,x);
+//        cota = t / pow(n,y);
+//        cSup = t / pow(n,z) ;
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
 }
+
+
 
 void test1(){
     int i = 0, j, n = 5;
@@ -183,6 +189,7 @@ int main(){
 
     sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2);
     imprimirTitulo(2);
+
     printf("\n");
     sum1((void (*)(int *, int)) sumaSubMax2,1,2,1.9);
 
