@@ -5,56 +5,49 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
-
-
 double microsegundos(){
+
     struct timeval t;
     if(gettimeofday(&t,NULL)<0)
         return 0.0;
     return (t.tv_usec + t.tv_sec * 1000000.0);
 }
-/*
-Funcion para imprimir los resultados en la tabla
-*/
-void imprimirFila(int k, int n, double t, double cI, double c, double cS){
+
+void imprimirFila(int k, int n, double t,
+                  double cI, double c, double cS){
 
     char as;
-
     if (k == 1)
         as = '*';
     else
         as = '-';
-
-    printf("%12d%15.3f%15.6f%15.6f%15.6f%5c\n", n, t, cI, c, cS, as);
-
+    printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-/*
-Funcion para imprimir el titulo de la tabla
-*/
-void imprimirTitulo(int i){
+void imprimirTitulo(int i, double inf, double fij, double sup){
 
     char s[12];
-    char t[] = "Tiempo";
-    char cI[] = "Cota Inf.";
-    char c[] = "Cota";
-    char cS[] = "Cota Sup.";
+    char t[] = "t(n)";
+    char c[] = "t(n) /n^";
 
     if (i == 1)
-        strcpy(s, "SumaMAx1");
+        strcpy(s, "SumaMax1");
     else if (i == 2)
-        strcpy(s, "SumaMAx2");
+        strcpy(s, "SumaMax2");
 
-    printf("\n--------%*s%*s--------\n",40,s,25,"");
+    printf("\n--------%*s%*s--------\n",40,s,33,"");
 
-    printf("%10s%17s%15s%15s%15s%5s\n", "n", t, cI , c, cS, "K");
+    printf("%12s%15s%15s%.2f%15s%.2f%15s%.2f%5s\n", "n", t, c, inf,
+           c, fij, c, sup, "K");
 
 }
 
 void inicializar_semilla(){
+
     srand(time(NULL));
     /*se establece la semilla de una nueva serie de enteros pseudo-aleatorios*/
 }
+
 int sumaSubMax1(const int v[] , int n){ //On2
     int i,j;
     int sumaMAx=0,estaSuma;
@@ -81,6 +74,7 @@ int sumaSubMax2(int v[], int n){
     }
     return sumaMax;
 }
+
 void listar_vector(int v[],int n){
     int i;
     printf("[");
@@ -89,19 +83,21 @@ void listar_vector(int v[],int n){
     }
     printf("]");
 }
+
 void aleatorio(int v[],int n){
     int i, m=2*n+1;
     for (i = 0;  i < n; i++) {
-        v[i]= (rand()%m) -n; //se generan numeros pseudoaleatorios entre -n y +n
+        v[i]= (rand()%m)-n; //se generan numeros pseudoaleatorios entre -n y +n
     }
-
-
 }
-void imprimirCotas(int *n, double *x,double *y,double *z,double *t,double *cInf,double *cota,double *cSup){
+
+void imprimirCotas(int *n, double *x,double *y,double *z,double *t,
+                   double *cInf,double *cota,double *cSup){
     *cInf = *t / pow(*n,*x);
     *cota = *t / pow(*n,*y);
     *cSup = *t / pow(*n,*z) ;
 }
+
 void sum1 (void(*func)(int [],int),double x,double y,double z, bool it){
 
     int n = 500;
@@ -114,22 +110,14 @@ void sum1 (void(*func)(int [],int),double x,double y,double z, bool it){
         aleatorio(v,n);
         t1 = microsegundos();
         func(v,n);
-
         t2 = microsegundos();
-
         t = t2 - t1;
-
         if (t < 500.0){
-
             t1 = microsegundos();
-
             for (k = 0; k < K; k++)
                 func(v,n);
-
             t2 = microsegundos();
-
             t = (t2 - t1) / K;
-
             tmenor500 = 1;
         }
         imprimirCotas(&n,&x,&y,&z,&t,&cInf,&cota,&cSup);
@@ -137,9 +125,6 @@ void sum1 (void(*func)(int [],int),double x,double y,double z, bool it){
         tmenor500 = 0;
     }
 }
-
-
-
 void test1(){
     int i = 0, j, n = 5;
     int aux[n];
@@ -175,16 +160,14 @@ void test2(){
     }
 }
 int main(){
-
-    inicializar_semilla();
     int i;
+    inicializar_semilla();
     for (i = 0; i <3 ; ++i) {
-        imprimirTitulo(1);
-        sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2,false);    }
-
+        imprimirTitulo(1, 1.8, 2, 2.2);
+        sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2,false);}
     printf("\n");
     for (i = 0; i < 3 ; ++i) {
-        imprimirTitulo(2);
+        imprimirTitulo(2, 0.8, 1, 1.2);
         sum1 ((void (*)(int *, int)) sumaSubMax2, 0.8, 1, 1.2,true);
     }
 
