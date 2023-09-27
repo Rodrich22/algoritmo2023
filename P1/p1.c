@@ -103,16 +103,16 @@ void imprimirCotas(int *n, double *x,double *y,double *z,double *t,double *cInf,
 }
 void sum1 (void(*func)(int [],int),double x,double y,double z){
 
-    int n = 250;
+    int n = 500;
     int v[256000];
     double t, t1, t2, cInf=0, cota=0, cSup=0;
-    int K = 1000, tmenor500 = 0;
+    int K = 1000, tmenor500 = 0,k;
 
-    for (int i = 0; i <=7; i++){
+    for (int i = 0; i <=6; i++,n *= 2){
         aleatorio(v,n);
         t1 = microsegundos();
         func(v,n);
-        n *= 2;
+
         t2 = microsegundos();
 
         t = t2 - t1;
@@ -121,7 +121,7 @@ void sum1 (void(*func)(int [],int),double x,double y,double z){
 
             t1 = microsegundos();
 
-            for (int k = 0; k < K; k++)
+            for (k = 0; k < K; k++)
                 func(v,n);
 
             t2 = microsegundos();
@@ -130,10 +130,7 @@ void sum1 (void(*func)(int [],int),double x,double y,double z){
 
             tmenor500 = 1;
         }
-         imprimirCotas(&n,&x,&y,&z,&t,&cInf,&cota,&cSup);
-//        cInf = t / pow(n,x);
-//        cota = t / pow(n,y);
-//        cSup = t / pow(n,z) ;
+        imprimirCotas(&n,&x,&y,&z,&t,&cInf,&cota,&cSup);
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
@@ -178,13 +175,18 @@ void test2(){
 int main(){
 
     inicializar_semilla();
-    imprimirTitulo(1);
 
-    sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2);
-    imprimirTitulo(2);
+    for (int i = 0; i <3 ; ++i) {
+        imprimirTitulo(1);
+        sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2);
+    }
 
     printf("\n");
-    sum1 ((void (*)(int *, int)) sumaSubMax2, 0.8, 1, 1.2);
+    for (int i = 0; i < 3 ; ++i) {
+        imprimirTitulo(2);
+        sum1 ((void (*)(int *, int)) sumaSubMax2, 0.8, 1, 1.2);
+    }
+
 
     //test1();
     //test2();
