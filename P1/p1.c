@@ -104,18 +104,14 @@ void imprimirCotas(int *n, double *x,double *y,double *z,double *t,double *cInf,
 void sum1 (void(*func)(int [],int),double x,double y,double z){
 
     int n = 250;
-    int *v;
+    int v[256000];
     double t, t1, t2, cInf=0, cota=0, cSup=0;
     int K = 1000, tmenor500 = 0;
 
     for (int i = 0; i <=7; i++){
-        v = (int *)malloc(sizeof(int) * n);
         aleatorio(v,n);
-       // printf("\n");
-     //   listar_vector(v, n);
         t1 = microsegundos();
         func(v,n);
-//        sumaSubMax1(v,n);
         n *= 2;
         t2 = microsegundos();
 
@@ -127,7 +123,6 @@ void sum1 (void(*func)(int [],int),double x,double y,double z){
 
             for (int k = 0; k < K; k++)
                 func(v,n);
-//                sumaSubMax1(v,n);
 
             t2 = microsegundos();
 
@@ -135,8 +130,6 @@ void sum1 (void(*func)(int [],int),double x,double y,double z){
 
             tmenor500 = 1;
         }
-        free(v);
-        //printf("%d\t", n);
          imprimirCotas(&n,&x,&y,&z,&t,&cInf,&cota,&cSup);
 //        cInf = t / pow(n,x);
 //        cota = t / pow(n,y);
@@ -191,7 +184,7 @@ int main(){
     imprimirTitulo(2);
 
     printf("\n");
-    sum1((void (*)(int *, int)) sumaSubMax2,1,2,1.9);
+    sum1 ((void (*)(int *, int)) sumaSubMax2, 0.8, 1, 1.2);
 
     //test1();
     //test2();
