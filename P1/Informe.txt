@@ -1,0 +1,51 @@
+Titulo: Algoritmos Práctica 1
+
+Integrantes: 
+	     -Antaya huamani Ney Abraham Rodrich
+	     -Rivera Bonilla Daniel
+	     -	     
+Grupo : 1.2
+Fecha : 
+
+Introducción: 
+Se ha realizado un informe con el objetivo de medir la complejidad computacional de los diferentes algoritmos que calculan la suma de la subsecuencia máxima de un vector.
+Para ello, se han medido sus tiempos de ejecución en repetidas ocasiones, y se ha seleccionado el mejor caso para cada algoritmo, usando como criterio el número de anomalías en sus iteraciones y los tiempos más bajos posibles. A raíz de las medidas, se ha realizado una comprobación empírica utilizando una cota subestimada, una ajustada y otra sobre-estimada.
+A modo de contexto, se ha de comentar que la medición de tiempos fue realizada desde un ordenador con las siguientes características:
+
+	Nombre del modelo: Nitro 5 AN515-57
+	Número de referencia : NH.QBUEB.003
+	Fabricante del procesador : Intel® 
+	Tipo de procesador: Core™ i7 de 11.a generación
+	Modelo de procesador: i7-11800H
+	Velocidad del Procesador: 2,30 GHz
+	Núcleo de procesador: Octa-Core (8 núcleos)
+	Memoria total del sistema instalado: 16 Gb
+	Tecnologìa de memoria del sistema: DDR4 SDRAM
+	Nombre del SO: Ubuntu 22.04.1 LTS
+	Tipo de SO: 64 bits
+	     
+Introducción: 
+	
+
+    
+Nota:
+	-Para el primer algoritmo se han usado las siguientes cotas: 
+		-Cota subestimada: n^1.8
+		-Cota ajustada: n^2
+		-Cota sobreestimada: n^2.2
+		
+	-Para el segundo algoritmo se han usado las siguientes cotas: 
+		-Cota subestimada: n^0.8
+		-Cota ajustada: n^1
+		-Cota sobreestimada: n^1.2
+	
+	-Las medidas que figuran en la tabla están en microsegundos(µs).
+	
+
+
+	
+	
+
+
+
+
