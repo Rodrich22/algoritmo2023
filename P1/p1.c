@@ -4,6 +4,7 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
+#include <stdbool.h>
 
 
 double microsegundos(){
@@ -101,14 +102,15 @@ void imprimirCotas(int *n, double *x,double *y,double *z,double *t,double *cInf,
     *cota = *t / pow(*n,*y);
     *cSup = *t / pow(*n,*z) ;
 }
-void sum1 (void(*func)(int [],int),double x,double y,double z){
+void sum1 (void(*func)(int [],int),double x,double y,double z, bool it){
 
     int n = 500;
     int v[256000];
     double t, t1, t2, cInf=0, cota=0, cSup=0;
-    int K = 1000, tmenor500 = 0,k;
-
-    for (int i = 0; i <=6; i++,n *= 2){
+    int K = 1000, tmenor500 = 0,k,m=6,i;
+    if (it==true)
+        m=9;
+    for ( i = 0; i <=m; i++,n *= 2){
         aleatorio(v,n);
         t1 = microsegundos();
         func(v,n);
@@ -175,16 +177,15 @@ void test2(){
 int main(){
 
     inicializar_semilla();
-
-    for (int i = 0; i <3 ; ++i) {
+    int i;
+    for (i = 0; i <3 ; ++i) {
         imprimirTitulo(1);
-        sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2);
-    }
+        sum1((void (*)(int *, int)) sumaSubMax1,1.8,2,2.2,false);    }
 
     printf("\n");
-    for (int i = 0; i < 3 ; ++i) {
+    for (i = 0; i < 3 ; ++i) {
         imprimirTitulo(2);
-        sum1 ((void (*)(int *, int)) sumaSubMax2, 0.8, 1, 1.2);
+        sum1 ((void (*)(int *, int)) sumaSubMax2, 0.8, 1, 1.2,true);
     }
 
 
