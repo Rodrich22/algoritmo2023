@@ -1,47 +1,100 @@
 Titulo: Algoritmos Práctica 1
 
 Integrantes: 
-	     -Antaya huamani Ney Abraham Rodrich
-	     -Rivera Bonilla Daniel
-	     -	     
+	     -Antaya huamani, Ney Abraham Rodrich
+	     -Rivera Bonilla, Daniel
+	     -Correa Blanco, Hugo
 Grupo : 1.2
-Fecha : 
+Fecha :30/09/2023
 
 Introducción: 
-Se ha realizado un informe con el objetivo de medir la complejidad computacional de los diferentes algoritmos que calculan la suma de la subsecuencia máxima de un vector.
-Para ello, se han medido sus tiempos de ejecución en repetidas ocasiones, y se ha seleccionado el mejor caso para cada algoritmo, usando como criterio el número de anomalías en sus iteraciones y los tiempos más bajos posibles. A raíz de las medidas, se ha realizado una comprobación empírica utilizando una cota subestimada, una ajustada y otra sobre-estimada.
-A modo de contexto, se ha de comentar que la medición de tiempos fue realizada desde un ordenador con las siguientes características:
 
-	Nombre del modelo: Nitro 5 AN515-57
-	Número de referencia : NH.QBUEB.003
-	Fabricante del procesador : Intel® 
-	Tipo de procesador: Core™ i7 de 11.a generación
-	Modelo de procesador: i7-11800H
-	Velocidad del Procesador: 2,30 GHz
-	Núcleo de procesador: Octa-Core (8 núcleos)
-	Memoria total del sistema instalado: 16 Gb
-	Tecnologìa de memoria del sistema: DDR4 SDRAM
-	Nombre del SO: Ubuntu 22.04.1 LTS
-	Tipo de SO: 64 bits
-	     
-Introducción: 
+Se ha realizado un informe con el objetivo de medir la complejidad computacional de dos 
+algoritmos diferentes que calculan la suma de la subsecuencia máxima de un vector.
+Para ello, se han examinado en repetidas ejecuciones y se ha seleccionado el mejor caso 
+para cada algoritmo, usando como criterio el número de anomalías en sus iteraciones y 
+la duración de sus tiempos de ejecución. A raíz de las medidas, se ha realizado una 
+comprobación empírica utilizando una cota ligeramente subestimada, una ajustada y otra 
+ligeramente sobrestimada. A modo de contextualización, se ha de comentar que la medición 
+de los tiempos se ha realizado desde un ordenador con las siguientes características:
+
+    Nombre del modelo: Nitro 5 AN515-57
+    Número de referencia : NH.QBUEB.003
+    Fabricante del procesador : Intel® 
+    Tipo de procesador: Core™ i7 de 11.a generación
+    Modelo de procesador: i7-11800H
+    Velocidad del Procesador: 2,30 GHz
+    Núcleo de procesador: Octa-Core (8 núcleos)
+    Memoria total del sistema instalado: 16 Gb
+    Tecnologìa de memoria del sistema: DDR4 SDRAM
+    Nombre del SO: Ubuntu 22.04.1 LTS
+    Tipo de SO: 64 bits
+    Compilador utilizado: gcc - GNU project C and C++ compiler
+
 	
+    Tras examinar los algoritmos usando una progresión geométrica de razón dos para el tamaño de
+    las entradas, se han obtenido los siguientes resultados:
+    
+	
+--------                                SumaMax1                                 --------
+           n           t(n)       t(n) /n^1.80       t(n) /n^2.00       t(n) /n^2.20    K
+         500        279.412           0.003873           0.001118           0.000322    *
+        1000       1164.000           0.004634           0.001164           0.000292    -
+        2000       4419.000           0.005052           0.001105           0.000242    -
+        4000      17580.000           0.005772           0.001099           0.000209    -
+        8000      70426.000           0.006640           0.001100           0.000182    -
+       16000     286292.000           0.007752           0.001118           0.000161    -
+       32000    1177517.000           0.009156           0.001150           0.000144    -
+       
+       
+       
+       
+--------                                SumaMax2                                 --------
+           n           t(n)       t(n) /n^0.80       t(n) /n^1.00       t(n) /n^1.20    K
+         500          1.046           0.007250           0.002092           0.000604    *
+        1000          1.810           0.007206           0.001810           0.000455    *
+        2000          3.699           0.008458           0.001850           0.000404    *
+        4000          7.396           0.009713           0.001849           0.000352    *
+        8000         14.468           0.010913           0.001808           0.000300    *
+       16000         29.160           0.012633           0.001822           0.000263    *
+       32000         57.743           0.014367           0.001804           0.000227    *
+       64000        115.496           0.016505           0.001805           0.000197    *
+      128000        232.655           0.019096           0.001818           0.000173    *
+      256000        463.806           0.021865           0.001812           0.000150    *
+      
+      
 
     
 Nota:
-	-Para el primer algoritmo se han usado las siguientes cotas: 
+	-Para el primer algoritmo se han hallado las siguientes cotas: 
 		-Cota subestimada: n^1.8
 		-Cota ajustada: n^2
 		-Cota sobreestimada: n^2.2
 		
-	-Para el segundo algoritmo se han usado las siguientes cotas: 
+	-Para el segundo algoritmo se han hallado las siguientes cotas: 
 		-Cota subestimada: n^0.8
 		-Cota ajustada: n^1
 		-Cota sobreestimada: n^1.2
 	
 	-Las medidas que figuran en la tabla están en microsegundos(µs).
 	
+	-Las medidas marcadas por un (*) se corresponden con tiempos de
+	 ejecución menores de 500 µs, para los cuales se ha empleado la
+	 solución de repetir K veces (en este caso 1000) la iteración.
+	 
+Conclusión: 
 
+        Como conclusión, cabe destacar que las cotas se han seleccionado debidamente, ya que 
+        en el caso de las inferiores y de las superiores tienden a lo esperado (infinito y 0 
+        respectivamente). Además, queda claramente reflejado que la cota ajustada del primer 
+        algoritmo tiende a 0.0011, mientras que el segundo tiende a 0.0018. Si bien es verdad 
+        que se han detectado anomalías como la primera medida del segundo algoritmo, estas pueden 
+        deberse a factores externos, como una interrupción del proceso por parte de la CPU. 
+        Por tanto, esto indica una complejidad temporal más eficiente para SumaMax2 en 
+        comparación con SumaMax1, lo que ha permitido estudiarla con más detalle al realizar 
+        más medidas con tamaños superiores. Así pues, parece evidente que SumaMax2 es la mejor 
+        opción, ya que su crecimiento en tiempo es más lento en comparación con SumaMax1 en 
+        todas las potencias de n analizadas.
 
 	
 	
