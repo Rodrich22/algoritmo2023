@@ -29,7 +29,6 @@ void imprimirTitulo(int i, double inf, double fij, double sup){
     char s[12];
     char t[] = "t(n)";
     char c[] = "t(n) /n^";
-
     if (i == 1)
         strcpy(s, "SumaMax1");
     else if (i == 2)
