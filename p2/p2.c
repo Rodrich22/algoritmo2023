@@ -52,7 +52,25 @@ void ord_ins (int v[], int n){
 	}
 	v[j+1]= x;
 	}
-	
+}
 
-
+void ordenacionShell(int v[], int n) {
+    int incremento = n;
+    do {
+        incremento = incremento / 2;
+        for (int i = incremento + 1; i <= n; i++) {
+            int tmp = v[i];
+            int j = i;
+            int seguir = 1;
+            while (j - incremento > 0 && seguir) {
+                if (tmp < v[j - incremento]) {
+                    v[j] = v[j - incremento];
+                    j = j - incremento;
+                } else {
+                    seguir = 0;
+                }
+            }
+            v[j] = tmp;
+        }
+    } while (incremento > 1);
 }
