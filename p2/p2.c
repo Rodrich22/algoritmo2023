@@ -64,18 +64,20 @@ void ord_ins (int v[], int n){
 
 void ordenacionShell(int v[], int n) {
     int incremento = n;
+    int i, tmp, j;
+    bool seguir;
     do {
         incremento = incremento / 2;
-        for (int i = incremento + 1; i <= n; i++) {
-            int tmp = v[i];
-            int j = i;
-            int seguir = 1;
-            while (j - incremento > 0 && seguir) {
+        for (i = incremento; i < n; i++) {
+            tmp = v[i];
+            j = i;
+            seguir = true;
+            while (j - incremento >= 0 && seguir) {
                 if (tmp < v[j - incremento]) {
                     v[j] = v[j - incremento];
                     j = j - incremento;
                 } else {
-                    seguir = 0;
+                    seguir = false;
                 }
             }
             v[j] = tmp;
@@ -92,7 +94,6 @@ void calcularCotas(int n, double x,double y,double z,double t,
 
 void imprimirFila(int k, int n, double t,
                   double cI, double c, double cS){
-
     char as;
     if (k == 1)
         as = '*';
@@ -101,14 +102,18 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-void imprimirTitulo(int i, double inf, double fij, double sup){
+void imprimirTitulo(int i, int j, double inf, double fij, double sup){
 
     char s[12];
     char t[] = "t(n)";
     char c[] = "t(n) /n^";
 
-    if (i == 1)
+    if (i == 1) {
         strcpy(s, "SumaMax1");
+        switch (j) {
+
+        }
+    }
     else if (i == 2)
         strcpy(s, "SumaMax2");
 
@@ -118,28 +123,49 @@ void imprimirTitulo(int i, double inf, double fij, double sup){
            c, fij, c, sup, "K");
 
 }
+/*void test(int v[], int n, bool ins){
+    int ordenado = 0;
+    printf("Inicializacion aleatoria\n");
+    aleatorio(v, n);
+    listar_vector(v, n);
+    printf("ordenado? %d\n", ordenado);
+    if(ins){ //HACER FUNCION AUXILIAR
+        printf("Ordenacion por insercion\n");
+        ord_ins(v, n);
+    }
+    else {
+        printf("Ordenacion shell\n");
+        ordenacionShell(v, n);
+    }
+}*/
 
 
-void ord (void(*func)(int [],int),double x,double y,double z, bool it){
+void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), double x,double y,double z){
 
     int n = 500;
     int v[256000];
-    double t, t1, t2, cInf=0, cota=0, cSup=0;
+    double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
     int K = 1000, tmenor500 = 0,k,m=6,i;
-    if (it==true)
-        m=9;
-    for ( i = 0; i <=m; i++,n *= 2){
-        aleatorio(v,n);
-        t1 = microsegundos();
-        func(v,n);
-        t2 = microsegundos();
-        t = t2 - t1;
+    for (i = 0; i <=m; i++,n *= 2){
+        inicializar(v,n);
+        ta = microsegundos();
+        ordenacion(v,n);
+        tb = microsegundos();
+        t = tb - ta;
         if (t < 500.0){
-            t1 = microsegundos();
+            ta = microsegundos();
+            for (k = 0; k < K; k++){
+                inicializar(v, n);
+                ordenacionShell(v, n);
+            }
+            tb = microsegundos();
+            t1 = tb-ta;
+            ta = microsegundos();
             for (k = 0; k < K; k++)
-                func(v,n);
-            t2 = microsegundos();
-            t = (t2 - t1) / K;
+                inicializar(v, n);
+            tb = microsegundos();
+            t2 = tb - ta;
+            t = (t1-t2) / K;
             tmenor500 = 1;
         }
         calcularCotas(n,x,y,z,t,&cInf,&cota,&cSup);
@@ -148,10 +174,21 @@ void ord (void(*func)(int [],int),double x,double y,double z, bool it){
     }
 }
 int main(){
-    int i;
     inicializar_semilla();
+    int n = 10;
+    int v[n];
+    aleatorio(v, n);
+    listar_vector(v, n);
+    ord_ins(v, n);
+    listar_vector(v, n);
+    aleatorio(v, n);
+    listar_vector(v, n);
+    ordenacionShell(v, n);
+    listar_vector(v, n);
+    /*
     for (i = 0; i <3 ; ++i) {
         imprimirTitulo(1, 1.8, 2, 2.2);
         ord((void (*)(int *, int)) ord_ins,1.8,2,2.2,false);}
     printf("\n");
+     */
 }
