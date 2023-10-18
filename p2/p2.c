@@ -7,7 +7,9 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
-
+enum p2 {
+    ALEATORIO,ASCENDENTE,DESCENDENTE
+};
 double microsegundos(){
 
     struct timeval t;
@@ -87,11 +89,28 @@ void ordenacionShell(int v[], int n) {
     } while (incremento > 1);
 }
 
-void calcularCotas(int n, double x,double y,double z,double t,
-                   double *cInf,double *cota,double *cSup){
+void calcularCotas( double *cInf,double *cota,double *cSup ,int n, double x,double y,double z,double t){
     *cInf = t / pow(n,x);
     *cota = t / pow(n,y);
     *cSup = t / pow(n,z) ;
+}
+void asignarCotas(double *cInf,double *cota,double *cSup  ,enum p2 f,int n, int t ,bool ins){
+    if(ins){
+        if(f == ASCENDENTE){
+            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t);
+        }
+    }
+
+    if( f == DESCENDENTE){
+//        *cInf = t / pow(n,x);
+//        *cota = t / pow(n,y);
+//        *cSup = t / pow(n,z) ;
+    }
+    if( f == ALEATORIO) {
+//        *cInf = t / pow(n,x);
+//        *cota = t / pow(n,y);
+//        *cSup = t / pow(n,z) ;
+    }
 }
 
 void imprimirFila(int k, int n, double t,
@@ -157,7 +176,7 @@ void test(int v[], int n, bool ins){
 }
 
 
-void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), double x,double y,double z){
+void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), double x,double y,double z, enum p2  f, bool ins){
     int n = 500;
     int v[256000];
     double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
@@ -184,7 +203,7 @@ void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), doubl
             t = (t1-t2) / K;
             tmenor500 = 1;
         }
-        calcularCotas(n,x,y,z,t,&cInf,&cota,&cSup);
+        asignarCotas(&cInf,&cota,&cSup  ,f,n,t ,ins);
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
@@ -196,11 +215,11 @@ int main(){
     int i;
     //test(v, n, true);
     //test(v, n, false);
-
+    bool ins = true;
     for (i = 0; i <3 ; ++i) {
         imprimirTitulo(2, 1.8, 2, 2.2);
-        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, 1.8,2,2.2);
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, 1.8,2,2.2);
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, 1.8,2,2.2, DESCENDENTE, ins);
+//        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, 1.8,2,2.2);
     }
     printf("\n");
 
