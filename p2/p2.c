@@ -94,17 +94,15 @@ void calcularCotas( double *cInf,double *cota,double *cSup ,int n, double x,doub
     *cota = t / pow(n,y);
     *cSup = t / pow(n,z) ;
 }
-void asignarCotas(double *cInf,double *cota,double *cSup  ,enum p2 f,int n, int t ,bool ins){
+void asignarCotas(double *cInf,double *cota,double *cSup ,enum p2 f,int n, int t ,bool ins){
     if(ins){
         if(f == ASCENDENTE){
-            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t);
+            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t);
         }
     }
 
     if( f == DESCENDENTE){
-//        *cInf = t / pow(n,x);
-//        *cota = t / pow(n,y);
-//        *cSup = t / pow(n,z) ;
+        calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t);
     }
     if( f == ALEATORIO) {
 //        *cInf = t / pow(n,x);
@@ -176,7 +174,7 @@ void test(int v[], int n, bool ins){
 }
 
 
-void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), double x,double y,double z, enum p2  f, bool ins){
+void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), enum p2  f, bool ins){
     int n = 500;
     int v[256000];
     double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
@@ -203,7 +201,7 @@ void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), doubl
             t = (t1-t2) / K;
             tmenor500 = 1;
         }
-        asignarCotas(&cInf,&cota,&cSup  ,f,n,t ,ins);
+        asignarCotas(&cInf,&cota,&cSup ,f,n,t ,ins);
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
@@ -211,15 +209,14 @@ void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), doubl
 int main(){
     inicializar_semilla();
     int n = 10;
-    int v[n];
     int i;
     //test(v, n, true);
     //test(v, n, false);
     bool ins = true;
     for (i = 0; i <3 ; ++i) {
         imprimirTitulo(2, 1.8, 2, 2.2);
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, 1.8,2,2.2, DESCENDENTE, ins);
-//        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, 1.8,2,2.2);
+        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, DESCENDENTE, ins);
+       ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, ASCENDENTE, ins);
     }
     printf("\n");
 
