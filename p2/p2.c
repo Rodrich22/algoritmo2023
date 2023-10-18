@@ -50,8 +50,6 @@ void listar_vector(int v[],int n){
     }
     printf("]");
 }
-
-
 void ord_ins (int v[], int n){
 	int i,j,x;
 	for(i=1; i<n;i++){
@@ -65,7 +63,6 @@ void ord_ins (int v[], int n){
 	v[j+1]= x;
 	}
 }
-
 void ordenacionShell(int v[], int n) {
     int incremento = n;
     int i, tmp, j;
@@ -89,25 +86,41 @@ void ordenacionShell(int v[], int n) {
     } while (incremento > 1);
 }
 
-void calcularCotas( double *cInf,double *cota,double *cSup ,int n, double x,double y,double z,double t){
-    *cInf = t / pow(n,x);
-    *cota = t / pow(n,y);
-    *cSup = t / pow(n,z) ;
+void calcularCotas( double *cInf,double *cota,double *cSup ,int n, double x,double y,double z,double t, bool ins){
+    if(ins) {
+        *cInf = t / pow(n, x);
+        *cota = t / pow(n, y);
+        *cSup = t / pow(n, z);
+    }
+    else{
+        /*cInf = t / (n * log2(n));
+        *cota = t / (n * log(n));
+        *cSup = t / pow(n, z);
+         */
+    }
 }
 void asignarCotas(double *cInf,double *cota,double *cSup ,enum p2 f,int n, int t ,bool ins){
     if(ins){
         if(f == ASCENDENTE){
-            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t);
+            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins);
+        }
+        if( f == DESCENDENTE){
+        calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
+        }
+        if( f == ALEATORIO) {
+        calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
         }
     }
-
-    if( f == DESCENDENTE){
-        calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t);
-    }
-    if( f == ALEATORIO) {
-//        *cInf = t / pow(n,x);
-//        *cota = t / pow(n,y);
-//        *cSup = t / pow(n,z) ;
+    else{
+        if(f == ASCENDENTE){
+            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins);
+        }
+        if( f == DESCENDENTE){
+            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
+        }
+        if( f == ALEATORIO) {
+            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
+        }
     }
 }
 
@@ -121,22 +134,30 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-void imprimirTitulo(int i, double inf, double fij, double sup){
+void imprimirTitulo(bool ins, double inf, double fij, double sup, enum p2 f) {
 
-    char s[12];
+    char s[45];
     char t[] = "t(n)";
-    char c[] = "t(n) /n^";
+    char cotas_ins[10];
+    char cotas_shell[10];
 
-    if (i == 1) {
-        strcpy(s, "SumaMax1");
+    if (ins) {
+        strcpy(s, "Ordenacion por insercion con inicializacion ");
+        strcpy(cotas_ins, "t(n) /n^");
+    } else {
+        strcpy(s, "Ordenacion shell con inicializacion ");
+        strcpy(cotas_shell, "t(n) /");
+
     }
-    else if (i == 2)
-        strcpy(s, "SumaMax2");
+    printf("\n--------%*s%*s%*s%*s--------\n",15, "",40,s,0,f == ALEATORIO?"aleatoria":f == ASCENDENTE?"ascendente":"descendente", 10 ,"");
+    printf("%12s%15s", "n",t);
+    if(ins)
+        printf("%15s%.2f%15s%.2f%15s%.2f\n", cotas_ins, inf,
+               cotas_ins, fij, cotas_ins, sup);
+    else
+        printf("%10s n log2 n %10s n log n %12s n^1.0\n", cotas_shell,
+               cotas_shell, cotas_shell);
 
-    printf("\n--------%*s%*s--------\n",40,s,33,"");
-
-    printf("%12s%15s%15s%.2f%15s%.2f%15s%.2f%5s\n", "n", t, c, inf,
-           c, fij, c, sup, "K");
 
 }
 bool esOrdenado(int v[], int n){
@@ -175,6 +196,7 @@ void test(int v[], int n, bool ins){
 
 
 void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), enum p2  f, bool ins){
+    imprimirTitulo(ins, 1.8, 2, 2.2, f);
     int n = 500;
     int v[256000];
     double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
@@ -213,11 +235,35 @@ int main(){
     //test(v, n, true);
     //test(v, n, false);
     bool ins = true;
-    for (i = 0; i <3 ; ++i) {
-        imprimirTitulo(2, 1.8, 2, 2.2);
-        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, DESCENDENTE, ins);
-       ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, ASCENDENTE, ins);
-    }
+    //for (i = 0; i <3 ; ++i) {
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, DESCENDENTE, true);
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, ASCENDENTE, true);
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, ALEATORIO, true);
+        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) descendente, DESCENDENTE, false);
+        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) ascendente, ASCENDENTE, false);
+        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) aleatorio, ALEATORIO, false);
+
+    //}
     printf("\n");
+    /*
+     *     switch (f) {
+            case DESCENDENTE:
+                strcpy(c, "t(n) / n log2 n");
+                break;
+            case ALEATORIO:
+                strcpy(c, "t(n) / n log n");
+                break;
+            default:
+                strcpy(c, "t(n) / n")
+
+
+        }
+    }
+
+    printf("\n--------%*s%*s%*s--------\n",40,s,0,f == ALEATORIO?"aleatoria":f == ASCENDENTE?"ascendente":"descendente", 10, "");
+
+    printf("%12s%15s", ins? "%15s%.2f%15s%.2f%15s%.2f%5s\n":"log ", "n", t, c, inf,
+           c, fij, c, sup : "K");
+     */
 
 }
