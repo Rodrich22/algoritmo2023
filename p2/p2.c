@@ -1,3 +1,5 @@
+//NOMBRES
+
 #include <stdio.h>
 #include <sys/time.h>
 #include <stdlib.h>
@@ -102,7 +104,7 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-void imprimirTitulo(int i, int j, double inf, double fij, double sup){
+void imprimirTitulo(int i, double inf, double fij, double sup){
 
     char s[12];
     char t[] = "t(n)";
@@ -110,9 +112,6 @@ void imprimirTitulo(int i, int j, double inf, double fij, double sup){
 
     if (i == 1) {
         strcpy(s, "SumaMax1");
-        switch (j) {
-
-        }
     }
     else if (i == 2)
         strcpy(s, "SumaMax2");
@@ -123,25 +122,42 @@ void imprimirTitulo(int i, int j, double inf, double fij, double sup){
            c, fij, c, sup, "K");
 
 }
-/*void test(int v[], int n, bool ins){
-    int ordenado = 0;
-    printf("Inicializacion aleatoria\n");
-    aleatorio(v, n);
+bool esOrdenado(int v[], int n){
+    int i;
+    for(i = 0; i < n; i++){
+        if(v[i] > v[i+1])
+            return false;
+    }
+    return true;
+}
+void ordenar(int v[], int n, bool ins){
     listar_vector(v, n);
-    printf("ordenado? %d\n", ordenado);
-    if(ins){ //HACER FUNCION AUXILIAR
-        printf("Ordenacion por insercion\n");
+    printf("\nordenado? %d\n", esOrdenado(v, n));
+    if(ins){
+        printf("\nOrdenacion por insercion\n");
         ord_ins(v, n);
     }
     else {
-        printf("Ordenacion shell\n");
+        printf("\nOrdenacion shell\n");
         ordenacionShell(v, n);
     }
-}*/
+    listar_vector(v, n);
+    printf("\nordenado? %d\n\n", esOrdenado(v, n));
+}
+void test(int v[], int n, bool ins){
+    printf("Inicializacion aleatoria\n");
+    aleatorio(v, n);
+    ordenar(v, n, ins);
+    printf("Inicializacion ascendente\n");
+    ascendente(v, n);
+    ordenar(v, n, ins);
+    printf("Inicializacion descendente\n");
+    descendente(v, n);
+    ordenar(v, n, ins);
+}
 
 
 void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), double x,double y,double z){
-
     int n = 500;
     int v[256000];
     double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
@@ -156,7 +172,7 @@ void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), doubl
             ta = microsegundos();
             for (k = 0; k < K; k++){
                 inicializar(v, n);
-                ordenacionShell(v, n);
+                ordenacion(v, n);
             }
             tb = microsegundos();
             t1 = tb-ta;
@@ -177,18 +193,15 @@ int main(){
     inicializar_semilla();
     int n = 10;
     int v[n];
-    aleatorio(v, n);
-    listar_vector(v, n);
-    ord_ins(v, n);
-    listar_vector(v, n);
-    aleatorio(v, n);
-    listar_vector(v, n);
-    ordenacionShell(v, n);
-    listar_vector(v, n);
-    /*
+    int i;
+    //test(v, n, true);
+    //test(v, n, false);
+
     for (i = 0; i <3 ; ++i) {
-        imprimirTitulo(1, 1.8, 2, 2.2);
-        ord((void (*)(int *, int)) ord_ins,1.8,2,2.2,false);}
+        imprimirTitulo(2, 1.8, 2, 2.2);
+        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, 1.8,2,2.2);
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, 1.8,2,2.2);
+    }
     printf("\n");
-     */
+
 }
