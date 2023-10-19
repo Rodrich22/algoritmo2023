@@ -7,8 +7,11 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
-enum p2 {
+enum inicializaciones {
     ALEATORIO,ASCENDENTE,DESCENDENTE
+};
+enum ordenaciones{
+    INSERCION, SHELL
 };
 double microsegundos(){
 
@@ -85,53 +88,15 @@ void ordenacionShell(int v[], int n) {
         }
     } while (incremento > 1);
 }
-
-void calcularCotas( double *cInf,double *cota,double *cSup ,int n, double x,double y,double z,double t, bool ins, enum p2 f){
-    if(ins) {
+void calcularCotas(double *cInf,double *cota,double *cSup, double x, double y, double z, int n, int t ,enum ordenaciones ord, enum inicializaciones in) {
+    if (ord == SHELL && (in == ASCENDENTE || in == DESCENDENTE)) {
+        *cInf = t / pow(n, x);
+        *cota = t / (n * log(n));
+        *cSup = t / pow(n, z);
+    } else {
         *cInf = t / pow(n, x);
         *cota = t / pow(n, y);
         *cSup = t / pow(n, z);
-    }
-    else {
-        if (f == ASCENDENTE) {
-
-        } else if (f == DESCENDENTE) {
-            /*cInf = t / (n * log2(n));
-            *cota = t / (n * log(n));
-            *cSup = t / pow(n, z);
-             */
-        }
-        else{
-            /**cInf = t / (n);
-            *cota = t / (pow (n, 1.1));
-            *cSup = t / (pow (n, 1.5));
-             * */
-            *cInf = t / (pow(n, 0.8) * log2(n));
-            *cota = t / (n*log2(n));
-            *cSup = t / (pow(n, 1.2) * log2(n));;
-        }
-    }
-}
-void asignarCotas(double *cInf,double *cota,double *cSup ,enum p2 f,int n, int t ,bool ins){
-    if(ins){
-        if(f == ASCENDENTE)
-            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins, ASCENDENTE);
-
-        else if( f == DESCENDENTE)
-            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, DESCENDENTE);
-
-        else
-            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, ALEATORIO);
-    }
-    else{
-        if(f == ASCENDENTE)
-            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins, ASCENDENTE);
-
-        else if( f == DESCENDENTE)
-            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, DESCENDENTE);
-
-        else
-            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, ALEATORIO);
     }
 }
 
@@ -145,31 +110,28 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-void imprimirTitulo(bool ins, double inf, double fij, double sup, enum p2 f) {
+void imprimirTitulo(double inf, double fij, double sup, enum ordenaciones ord, enum inicializaciones in) {
 
     char s[45];
     char t[] = "t(n)";
-    char cotas_ins[10];
-    char cotas_shell[10];
-
-    if (ins) {
+    char cotas_log[] = "t(n) /nlogn";
+    char cotas_exp[] = "t(n) /n^";
+    if (ord == INSERCION)
         strcpy(s, "Ordenacion por insercion con inicializacion ");
-        strcpy(cotas_ins, "t(n) /n^");
-    } else {
-        strcpy(s, "Ordenacion shell con inicializacion ");
-        strcpy(cotas_shell, "t(n) /");
-
-    }
-    printf("\n--------%*s%*s%*s%*s--------\n",15, "",40,s,0,f == ALEATORIO?"aleatoria":f == ASCENDENTE?"ascendente":"descendente", 10 ,"");
-    printf("%12s%15s", "n",t);
-    if(ins)
-        printf("%15s%.2f%15s%.2f%15s%.2f\n", cotas_ins, inf,
-               cotas_ins, fij, cotas_ins, sup);
     else
-        printf("%10s n log2 n %10s n log n %12s n^1.0\n", cotas_shell,
-               cotas_shell, cotas_shell);
+        strcpy(s, "Ordenacion shell con inicializacion ");
 
-
+    printf("\n--------%*s%*s%*s%*s--------\n", 15, "", 40, s, 0,
+           in == ALEATORIO ? "aleatoria" : in == ASCENDENTE ? "ascendente" : "descendente", 10, "");
+    printf("%12s%15s", "n", t);
+    if (ord == SHELL && (in == ASCENDENTE || in == DESCENDENTE)) {
+        printf("%15s%.2f%19s%15s%.2f\n", cotas_exp, inf,
+               cotas_log, cotas_exp, sup);
+    }
+    else {
+       printf("%15s%.2f%15s%.2f%15s%.2f\n", cotas_exp, inf,
+               cotas_exp, fij, cotas_exp, sup);
+    }
 }
 bool esOrdenado(int v[], int n){
     int i;
@@ -179,10 +141,10 @@ bool esOrdenado(int v[], int n){
     }
     return true;
 }
-void ordenar(int v[], int n, bool ins){
+void ordenar(int v[], int n, enum ordenaciones ord){
     listar_vector(v, n);
     printf("\nordenado? %d\n", esOrdenado(v, n));
-    if(ins){
+    if(ord == INSERCION){
         printf("\nOrdenacion por insercion\n");
         ord_ins(v, n);
     }
@@ -193,27 +155,27 @@ void ordenar(int v[], int n, bool ins){
     listar_vector(v, n);
     printf("\nordenado? %d\n\n", esOrdenado(v, n));
 }
-void test(int v[], int n, bool ins){
+void test(int v[], int n, enum ordenaciones ord){
     printf("Inicializacion aleatoria\n");
     aleatorio(v, n);
-    ordenar(v, n, ins);
+    ordenar(v, n, ord);
     printf("Inicializacion ascendente\n");
     ascendente(v, n);
-    ordenar(v, n, ins);
+    ordenar(v, n, ord);
     printf("Inicializacion descendente\n");
     descendente(v, n);
-    ordenar(v, n, ins);
+    ordenar(v, n, ord);
 }
 
 
-void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), enum p2  f, bool ins){
-    imprimirTitulo(ins, 1.8, 2, 2.2, f);
+void ord (void(*ordenacion)(int [],int), void (*inicializacion) (int[], int), enum ordenaciones ord, enum inicializaciones in, double x, double y, double z){
+    imprimirTitulo(x, y, z, ord, in);
     int n = 500;
     int v[256000];
     double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
-    int K = 1000, tmenor500 = 0,k,m=9,i;
+    int K = 1000, tmenor500 = 0,k,m=6,i;
     for (i = 0; i <=m; i++,n *= 2){
-        inicializar(v,n);
+        inicializacion(v,n);
         ta = microsegundos();
         ordenacion(v,n);
         tb = microsegundos();
@@ -221,20 +183,20 @@ void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), enum 
         if (t < 500.0){
             ta = microsegundos();
             for (k = 0; k < K; k++){
-                inicializar(v, n);
+                inicializacion(v, n);
                 ordenacion(v, n);
             }
             tb = microsegundos();
             t1 = tb-ta;
             ta = microsegundos();
             for (k = 0; k < K; k++)
-                inicializar(v, n);
+                inicializacion(v, n);
             tb = microsegundos();
             t2 = tb - ta;
             t = (t1-t2) / K;
             tmenor500 = 1;
         }
-        asignarCotas(&cInf,&cota,&cSup ,f,n,t ,ins);
+        calcularCotas(&cInf, &cota, &cSup, x, y, z, n, t ,ord, in);
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
@@ -242,39 +204,18 @@ void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), enum 
 int main(){
     inicializar_semilla();
     int n = 10;
+    int v[n];
     int i;
-    //test(v, n, true);
-    //test(v, n, false);
-    bool ins = true;
+    test(v, n, INSERCION);
+    test(v, n, SHELL);
     for (i = 0; i <3 ; ++i) {
-        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, DESCENDENTE, true);
-        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, ASCENDENTE, true);
-        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, ALEATORIO, true);
-        //ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) descendente, DESCENDENTE, false);
-        //ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) ascendente, ASCENDENTE, false);
-        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) aleatorio, ALEATORIO, false);
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, INSERCION, DESCENDENTE, 1.8,2.0,2.2);
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, INSERCION, ASCENDENTE, 0.8,1.0,1.2);
+        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, INSERCION, ALEATORIO, 1.8,2.0,2.2);
+        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) descendente, SHELL, DESCENDENTE, 1.0,0.0,1.5);
+        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) ascendente, SHELL, ASCENDENTE, 1.0,0.0,1.5);
+        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) aleatorio, SHELL, ALEATORIO, 1.0,1.2,1.4);
 
     }
-    printf("\n");
-    /*
-     *     switch (f) {
-            case DESCENDENTE:
-                strcpy(c, "t(n) / n log2 n");
-                break;
-            case ALEATORIO:
-                strcpy(c, "t(n) / n log n");
-                break;
-            default:
-                strcpy(c, "t(n) / n")
-
-
-        }
-    }
-
-    printf("\n--------%*s%*s%*s--------\n",40,s,0,f == ALEATORIO?"aleatoria":f == ASCENDENTE?"ascendente":"descendente", 10, "");
-
-    printf("%12s%15s", ins? "%15s%.2f%15s%.2f%15s%.2f%5s\n":"log ", "n", t, c, inf,
-           c, fij, c, sup : "K");
-     */
-
+    return 0;
 }
