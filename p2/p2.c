@@ -76,7 +76,7 @@ void ordenacionShell(int v[], int n) {
             while (j - incremento >= 0 && seguir) {
                 if (tmp < v[j - incremento]) {
                     v[j] = v[j - incremento];
-                    j = j - incremento;
+                    j -= incremento;
                 } else {
                     seguir = false;
                 }
@@ -86,41 +86,52 @@ void ordenacionShell(int v[], int n) {
     } while (incremento > 1);
 }
 
-void calcularCotas( double *cInf,double *cota,double *cSup ,int n, double x,double y,double z,double t, bool ins){
+void calcularCotas( double *cInf,double *cota,double *cSup ,int n, double x,double y,double z,double t, bool ins, enum p2 f){
     if(ins) {
         *cInf = t / pow(n, x);
         *cota = t / pow(n, y);
         *cSup = t / pow(n, z);
     }
-    else{
-        /*cInf = t / (n * log2(n));
-        *cota = t / (n * log(n));
-        *cSup = t / pow(n, z);
-         */
+    else {
+        if (f == ASCENDENTE) {
+
+        } else if (f == DESCENDENTE) {
+            /*cInf = t / (n * log2(n));
+            *cota = t / (n * log(n));
+            *cSup = t / pow(n, z);
+             */
+        }
+        else{
+            /**cInf = t / (n);
+            *cota = t / (pow (n, 1.1));
+            *cSup = t / (pow (n, 1.5));
+             * */
+            *cInf = t / (pow(n, 0.8) * log2(n));
+            *cota = t / (n*log2(n));
+            *cSup = t / (pow(n, 1.2) * log2(n));;
+        }
     }
 }
 void asignarCotas(double *cInf,double *cota,double *cSup ,enum p2 f,int n, int t ,bool ins){
     if(ins){
-        if(f == ASCENDENTE){
-            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins);
-        }
-        if( f == DESCENDENTE){
-        calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
-        }
-        if( f == ALEATORIO) {
-        calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
-        }
+        if(f == ASCENDENTE)
+            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins, ASCENDENTE);
+
+        else if( f == DESCENDENTE)
+            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, DESCENDENTE);
+
+        else
+            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, ALEATORIO);
     }
     else{
-        if(f == ASCENDENTE){
-            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins);
-        }
-        if( f == DESCENDENTE){
-            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
-        }
-        if( f == ALEATORIO) {
-            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins);
-        }
+        if(f == ASCENDENTE)
+            calcularCotas(cInf,cota,cSup,n,0.8,1.0,1.2,t, ins, ASCENDENTE);
+
+        else if( f == DESCENDENTE)
+            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, DESCENDENTE);
+
+        else
+            calcularCotas(cInf,cota,cSup,n,1.8,2.0,2.2,t, ins, ALEATORIO);
     }
 }
 
@@ -200,7 +211,7 @@ void ord (void(*ordenacion)(int [],int), void (*inicializar) (int[], int), enum 
     int n = 500;
     int v[256000];
     double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
-    int K = 1000, tmenor500 = 0,k,m=6,i;
+    int K = 1000, tmenor500 = 0,k,m=9,i;
     for (i = 0; i <=m; i++,n *= 2){
         inicializar(v,n);
         ta = microsegundos();
@@ -235,15 +246,15 @@ int main(){
     //test(v, n, true);
     //test(v, n, false);
     bool ins = true;
-    //for (i = 0; i <3 ; ++i) {
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, DESCENDENTE, true);
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, ASCENDENTE, true);
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, ALEATORIO, true);
-        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) descendente, DESCENDENTE, false);
-        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) ascendente, ASCENDENTE, false);
+    for (i = 0; i <3 ; ++i) {
+        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, DESCENDENTE, true);
+        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, ASCENDENTE, true);
+        //ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, ALEATORIO, true);
+        //ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) descendente, DESCENDENTE, false);
+        //ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) ascendente, ASCENDENTE, false);
         ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) aleatorio, ALEATORIO, false);
 
-    //}
+    }
     printf("\n");
     /*
      *     switch (f) {
