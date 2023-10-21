@@ -1,0 +1,189 @@
+Titulo: Algoritmos Práctica 2
+
+Integrantes: 
+	     -Antaya huamani, Ney Abraham Rodrich
+	     -Rivera Bonilla, Daniel
+	     -Correa Blanco, Hugo
+Grupo : 1.2
+Fecha :21/10/2023
+
+Introducción: 
+Se ha realizado un informe con el objetivo de medir la complejidad computacional de dos 
+algoritmos de ordenación diferentes, probando para cada uno de ellos tres inicializaciones
+distintas: Un vector con inicialización aleatoria, un vector ordenado ascendentemente, 
+lo que supondría el mejor caso para un algortimo de ordenación; y un vector ordenado 
+descendentemente, lo que supondría el peor caso.  
+Para ello, se han examinado en repetidas ejecuciones y se ha seleccionado el mejor caso 
+para cada algoritmo, usando como criterio el número de anomalías en sus iteraciones y 
+la duración de sus tiempos de ejecución. A raíz de las medidas, se ha realizado una 
+comprobación empírica utilizando una cota ligeramente subestimada, una ajustada y otra 
+ligeramente sobrestimada. A modo de contextualización, se ha de comentar que la medición 
+de los tiempos se ha realizado desde un ordenador con las siguientes características:
+
+    Nombre del modelo: Nitro 5 AN515-57
+    Número de referencia : NH.QBUEB.003
+    Fabricante del procesador : Intel® 
+    Tipo de procesador: Core™ i7 de 11.a generación
+    Modelo de procesador: i7-11800H
+    Velocidad del Procesador: 2,30 GHz
+    Núcleo de procesador: Octa-Core (8 núcleos)
+    Memoria total del sistema instalado: 16 Gb
+    Tecnologìa de memoria del sistema: DDR4 SDRAM
+    Nombre del SO: Ubuntu 22.04.1 LTS
+    Tipo de SO: 64 bits
+    Compilador utilizado: gcc - GNU project C and C++ compiler
+
+	
+    Tras examinar los algoritmos usando una progresión geométrica de razón dos para el tamaño de
+    las entradas, se han obtenido los siguientes resultados:
+    
+	                   Ordenacion por insercion con inicializacion descendente          
+           n           t(n)       t(n) /n^1.80       t(n) /n^2.00       t(n) /n^2.20    K
+         500        244.729           0.003383           0.000976           0.000282    *
+        1000        966.000           0.003846           0.000966           0.000243    -
+        2000       4015.000           0.004590           0.001004           0.000219    -
+        4000      15564.000           0.005110           0.000973           0.000185    -
+        8000      61985.000           0.005844           0.000969           0.000161    -
+       16000     246757.000           0.006681           0.000964           0.000139    -
+       32000     983031.000           0.007644           0.000960           0.000121    -
+       
+       *La cota ajustada tiende a 0.0009
+       
+
+                      Ordenacion por insercion con inicializacion ascendente          
+           n           t(n)       t(n) /n^0.80       t(n) /n^1.00       t(n) /n^1.20    K
+         500          1.118           0.006931           0.002000           0.000577    *
+        1000          2.196           0.007962           0.002000           0.000502    *
+        2000          4.670           0.009146           0.002000           0.000437    *
+        4000          8.964           0.010506           0.002000           0.000381    *
+        8000         17.950           0.012823           0.002125           0.000352    *
+       16000         35.638           0.015163           0.002188           0.000316    *
+       32000         70.719           0.017417           0.002188           0.000275    *
+       
+       *La cota ajustada tiende a 0.002
+       
+
+                      Ordenacion por insercion con inicializacion aleatoria          
+           n           t(n)       t(n) /n^1.80       t(n) /n^2.00       t(n) /n^2.20    K
+         500        123.749           0.001705           0.000492           0.000142    *
+        1000        488.619           0.001943           0.000488           0.000123    *
+        2000       1876.000           0.002145           0.000469           0.000103    -
+        4000       7786.000           0.002556           0.000487           0.000093    -
+        8000      31118.000           0.002934           0.000486           0.000081    -
+       16000     121599.000           0.003292           0.000475           0.000069    -
+       32000     492907.000           0.003833           0.000481           0.000060    -
+       
+       *La cota ajustada tiende a 0.0004
+       
+Nota: Para la ordenación por Inserción
+	-Con inicialización descendente, se han hallado las siguientes cotas:
+		-Cota subestimada: n^1.8
+		-Cota ajustada: n^2
+		-Cota sobreestimada: n^2.2
+		
+	-Con inicialización ascendente, se han hallado las siguientes cotas: 
+		-Cota subestimada: n^0.8
+		-Cota ajustada: n^1
+		-Cota sobreestimada: n^1.2
+		
+	-Con inicialización aleatoria, se han hallado las siguientes cotas: 
+		-Cota subestimada: n^1.8
+		-Cota ajustada: n^2
+		-Cota sobreestimada: n^2.2
+		
+	
+	-Las medidas que figuran en la tabla están en microsegundos(µs).
+	
+	-Las medidas marcadas por un (*) se corresponden con tiempos de
+        ejecución menores de 500 µs, para los cuales se ha empleado la
+        solución de repetir K veces (en este caso 1000) tanto la 
+        inicialización como la ordenación, y repetir posteriormente K
+        veces la inicialización, para restárselo a la medida anteriror 
+        y conocer lo que tarda únicamente la ordenación.
+       
+       
+                               Ordenacion shell con inicializacion descendente          
+           n           t(n)       t(n) /n^1.00       t(n) /n^1.14       t(n) /n^1.30    K
+         500         15.675           0.030000           0.012568           0.004650    *
+        1000         35.962           0.035000           0.013307           0.004406    *
+        2000         78.738           0.039000           0.013456           0.003988    *
+        4000        176.737           0.044000           0.013777           0.003655    *
+        8000        382.049           0.047750           0.013569           0.003221    *
+       16000        827.000           0.051687           0.013329           0.002832    -
+       32000       1811.000           0.056594           0.013245           0.002519    -
+       
+       *La cota ajustada tiende a 0.013
+
+
+                          Ordenacion shell con inicializacion ascendente          
+           n           t(n)       t(n) /n^1.00       t(n) /n^1.12       t(n) /n^1.30    K
+         500         10.222           0.020000           0.009488           0.003100    *
+        1000         23.103           0.023000           0.010040           0.002896    *
+        2000         52.286           0.026000           0.010444           0.002659    *
+        4000        115.254           0.028750           0.010627           0.002388    *
+        8000        249.073           0.031125           0.010586           0.002100    *
+       16000        533.000           0.033313           0.010426           0.001825    -
+       32000       1144.000           0.035750           0.010296           0.001591    -
+       
+       *La cota ajustada tiende a 0.010
+       
+       
+
+                          Ordenacion shell con inicializacion aleatoria          
+           n           t(n)       t(n) /n^1.00       t(n) /n^1.19       t(n) /n^1.40    K
+         500         41.089           0.082000           0.025177           0.006827    *
+        1000         96.360           0.096000           0.025839           0.006057    *
+        2000        217.802           0.108500           0.025600           0.005188    *
+        4000        498.715           0.124500           0.025750           0.004512    *
+        8000       1119.000           0.139875           0.025360           0.003842    -
+       16000       2526.000           0.157875           0.025092           0.003286    -
+       32000       5923.000           0.185094           0.025788           0.002920    -
+       
+       *La cota ajustada tiende a 0.025
+
+    
+Nota: Para la ordenación Shell
+	-Con inicialización descendente, se han hallado las siguientes cotas:
+		-Cota subestimada: n^1.00
+		-Cota ajustada: n^1.14
+		-Cota sobreestimada: n^1.30
+		
+	-Con inicialización ascendente, se han hallado las siguientes cotas: 
+		-Cota subestimada: n^1.00
+		-Cota ajustada: n^1.12
+		-Cota sobreestimada: n^1.30
+		
+	-Con inicialización aleatoria, se han hallado las siguientes cotas: 
+		-Cota subestimada: n^1.00
+		-Cota ajustada: n^1.19
+		-Cota sobreestimada: n^1.40
+		
+	
+	-Las medidas que figuran en la tabla están en microsegundos(µs).
+	
+	-Las medidas marcadas por un (*) se corresponden con tiempos de
+        ejecución menores de 500 µs, para los cuales se ha empleado la
+        solución de repetir K veces (en este caso 1000) tanto la 
+        inicialización como la ordenación, y repetir posteriormente K
+        veces la inicialización, para restárselo a la medida anteriror 
+        y conocer lo que tarda únicamente la ordenación.
+        
+        
+Conclusión:     
+        
+        Podemos concluir que los resultados empíricos obtenidos del estudio del algoritmo de
+        Inserción son coherentes con las complejidades teorícas, siendo O(n²) para las
+        una inicialización descendente y aleatoria, y O(n) para una inicializacion ascendente.
+	Sin embargo, no podemos concluir lo mismo para el algoritmo de ordenación shell, ya que sus 
+	complejidades deberían ser de O(n logn) para una inicialización aleatoria, O (n log2n) para una 
+	inicialización descendente y lineal para una inicialización ascendente, lo cual no es
+        coherente con lo obtenido, como se ve en las tablas.
+        
+        Basándonos en los resultados que obtuvimos de manera empírica, podemos concluir que el 
+        algoritmo de ordenación shell es generalmente más eficiente que el algoritmo de ordenación
+        por inserción en términos de tiempo de ejecución, especialmente en conjuntos de datos más grandes.
+        Sin embargo, la elección del algoritmo más adecuado dependerá de las necesidades especificas de la 
+        aplicación y de otros factores, como la estabilidad del algoritmo en diferentes situaciones,
+        para lo cual los resultados obtenidos pueden servir de guía para un elección correcta.
+	
+	

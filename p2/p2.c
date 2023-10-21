@@ -1,4 +1,6 @@
-//NOMBRES
+//Daniel Rivera Bonilla
+//Rodrich Antaya Huamani
+//Hugo Correa Blanco
 
 #include <stdio.h>
 #include <sys/time.h>
@@ -7,6 +9,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
+
 enum inicializaciones {
     ALEATORIO,ASCENDENTE,DESCENDENTE
 };
@@ -14,7 +17,6 @@ enum ordenaciones{
     INSERCION, SHELL
 };
 double microsegundos(){
-
     struct timeval t;
     if(gettimeofday(&t,NULL)<0)
         return 0.0;
@@ -88,17 +90,14 @@ void ordenacionShell(int v[], int n) {
         }
     } while (incremento > 1);
 }
-void calcularCotas(double *cInf,double *cota,double *cSup, double x, double y, double z, int n, int t ,enum ordenaciones ord, enum inicializaciones in) {
-    if (ord == SHELL && (in == ASCENDENTE || in == DESCENDENTE)) {
-        *cInf = t / pow(n, x);
-        *cota = t / (n * log(n));
-        *cSup = t / pow(n, z);
-    } else {
-        *cInf = t / pow(n, x);
-        *cota = t / pow(n, y);
-        *cSup = t / pow(n, z);
-    }
+
+void calcularCotas(double *cInf,double *cota,double *cSup, double x, double y,
+                   double z, int n, int t) {
+    *cInf = t / pow(n, x);
+    *cota = t / pow(n, y);
+    *cSup = t / pow(n, z);
 }
+
 
 void imprimirFila(int k, int n, double t,
                   double cI, double c, double cS){
@@ -110,28 +109,24 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-void imprimirTitulo(double inf, double fij, double sup, enum ordenaciones ord, enum inicializaciones in) {
+void imprimirTitulo(double inf, double fij, double sup, enum ordenaciones ord
+                    , enum inicializaciones in) {
 
     char s[45];
     char t[] = "t(n)";
-    char cotas_log[] = "t(n) /nlogn";
     char cotas_exp[] = "t(n) /n^";
     if (ord == INSERCION)
         strcpy(s, "Ordenacion por insercion con inicializacion ");
     else
         strcpy(s, "Ordenacion shell con inicializacion ");
 
-    printf("\n--------%*s%*s%*s%*s--------\n", 15, "", 40, s, 0,
-           in == ALEATORIO ? "aleatoria" : in == ASCENDENTE ? "ascendente" : "descendente", 10, "");
+    printf("\n%*s%*s%*s%*s\n", 22, "", 40, s, 0,
+           in == ALEATORIO ? "aleatoria" : in == ASCENDENTE ? 
+                           "ascendente" : "descendente", 10, "");
     printf("%12s%15s", "n", t);
-    if (ord == SHELL && (in == ASCENDENTE || in == DESCENDENTE)) {
-        printf("%15s%.2f%19s%15s%.2f\n", cotas_exp, inf,
-               cotas_log, cotas_exp, sup);
-    }
-    else {
-       printf("%15s%.2f%15s%.2f%15s%.2f\n", cotas_exp, inf,
-               cotas_exp, fij, cotas_exp, sup);
-    }
+
+    printf("%15s%.2f%15s%.2f%15s%.2f%5s\n", cotas_exp, inf,cotas_exp, 
+                                             fij, cotas_exp, sup,"K");
 }
 bool esOrdenado(int v[], int n){
     int i;
@@ -168,12 +163,14 @@ void test(int v[], int n, enum ordenaciones ord){
 }
 
 
-void ord (void(*ordenacion)(int [],int), void (*inicializacion) (int[], int), enum ordenaciones ord, enum inicializaciones in, double x, double y, double z){
-    imprimirTitulo(x, y, z, ord, in);
+void ord (void(*ordenacion)(int [],int), void (*inicializacion) (int[], int),
+          enum ordenaciones ord, enum inicializaciones in, double x,
+          double y, double z){
     int n = 500;
-    int v[256000];
+    int v[32000];
     double t, t1, t2, ta, tb, cInf=0, cota=0, cSup=0;
     int K = 1000, tmenor500 = 0,k,m=6,i;
+    imprimirTitulo(x, y, z, ord, in);
     for (i = 0; i <=m; i++,n *= 2){
         inicializacion(v,n);
         ta = microsegundos();
@@ -196,25 +193,30 @@ void ord (void(*ordenacion)(int [],int), void (*inicializacion) (int[], int), en
             t = (t1-t2) / K;
             tmenor500 = 1;
         }
-        calcularCotas(&cInf, &cota, &cSup, x, y, z, n, t ,ord, in);
+        calcularCotas(&cInf, &cota, &cSup, x, y, z, n, t );
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
 }
-int main(){
-    inicializar_semilla();
+
+void testGlo(){
     int n = 10;
     int v[n];
-    int i;
     test(v, n, INSERCION);
     test(v, n, SHELL);
+}
+
+int main(){
+    int i;
+    inicializar_semilla();
+    //testGlo();
     for (i = 0; i <3 ; ++i) {
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) descendente, INSERCION, DESCENDENTE, 1.8,2.0,2.2);
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) ascendente, INSERCION, ASCENDENTE, 0.8,1.0,1.2);
-        ord((void (*)(int *, int)) ord_ins, (void (*)(int *, int)) aleatorio, INSERCION, ALEATORIO, 1.8,2.0,2.2);
-        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) descendente, SHELL, DESCENDENTE, 1.0,0.0,1.5);
-        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) ascendente, SHELL, ASCENDENTE, 1.0,0.0,1.5);
-        ord((void (*)(int *, int)) ordenacionShell, (void (*)(int *, int)) aleatorio, SHELL, ALEATORIO, 1.0,1.2,1.4);
+        ord(ord_ins, descendente, INSERCION, DESCENDENTE, 1.8,2.0,2.2);
+        ord( ord_ins, ascendente, INSERCION, ASCENDENTE, 0.8,1.0,1.2);
+        ord( ord_ins,  aleatorio, INSERCION, ALEATORIO, 1.8,2.0,2.2);
+        ord(ordenacionShell, descendente, SHELL, DESCENDENTE, 1,1.14,1.3);
+        ord(ordenacionShell,  ascendente, SHELL, ASCENDENTE, 1.0,1.12,1.3);
+        ord(ordenacionShell, aleatorio, SHELL, ALEATORIO, 1,1.19,1.4);
 
     }
     return 0;
