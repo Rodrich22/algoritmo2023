@@ -60,12 +60,11 @@ void ord_ins (int v[], int n){
 	for(i=1; i<n;i++){
 		x=v[i];
 		j=i-1;
-		
-	while (j>=0 && v[j] >x){
-		v[j+1] = v[j];
-		j=j-1;
-	}
-	v[j+1]= x;
+        while (j>=0 && v[j] >x){
+            v[j+1] = v[j];
+            j=j-1;
+        }
+	    v[j+1]= x;
 	}
 }
 void ordenacionShell(int v[], int n) {
@@ -125,7 +124,7 @@ void imprimirTitulo(double inf, double fij, double sup, enum ordenaciones ord
                            "ascendente" : "descendente", 10, "");
     printf("%12s%15s", "n", t);
 
-    printf("%15s%.2f%15s%.2f%15s%.2f%5s\n", cotas_exp, inf,cotas_exp, 
+    printf("%15s%.2f%15s%.2f%15s%.2f%5s\n", cotas_exp, inf,cotas_exp,
                                              fij, cotas_exp, sup,"K");
 }
 bool esOrdenado(int v[], int n){
