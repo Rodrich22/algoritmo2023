@@ -12,29 +12,34 @@ struct monticulo{
     int vector[TAM];
 };
 
-typedef struct monticulo *pmonticulo;
+typedef struct monticulo * pmonticulo;
 
 void inicializarMonticulo(pmonticulo* m){
-    *m = NULL;
-    (*m)->ultimo = 0;
+    *m = malloc(sizeof(struct monticulo));
+    if(*m == NULL){
+        printf("Error al asignar memoria\n");
+        free(m);
+    }
+    else
+        (*m)->ultimo = 0;
 }
 bool MonticuloVacio(pmonticulo m){
     return m->ultimo == 0;
 }
-void intercambiar( int *x , int *y){
+void intercambiar(int* x , int* y){
     int tmp;
     tmp = *x;
     *x = *y;
     *y = tmp;
 }
-void Flotar (pmonticulo* m, int i) {
-    while (i > 0 && (*m)->vector[i / 2] < (*m)->vector[i]) {
-        intercambiar(&((*m)->vector[i / 2]), &((*m)->vector[i]));
+void Flotar (pmonticulo m, int i) {
+    while (i > 0 && m->vector[i / 2] < m->vector[i]) {
+        intercambiar(&m->vector[i / 2], &m->vector[i]);
         i /= 2;
     }
 }
 
-void Hundir (pmonticulo* m , int i){
+void Hundir (pmonticulo m , int i){
     int j;
     int HijoIzq;
     int HijoDer;
@@ -42,24 +47,42 @@ void Hundir (pmonticulo* m , int i){
         HijoIzq = 2*i+1;
         HijoDer = 2*i+2;
         j = i;
-        if(HijoDer <= (*m)->ultimo && (*m)->vector[HijoDer] > (*m)->vector[i])
+        if(HijoDer <= m->ultimo && m->vector[HijoDer] < m->vector[i])
             i = HijoDer;
-        if(HijoIzq <= (*m)->ultimo && (*m)->vector[HijoIzq] > (*m)->vector[i]){
-            i= HijoIzq;
+        if(HijoIzq <= m->ultimo && m->vector[HijoIzq] < m->vector[i]){
+            i = HijoIzq;
         }
-        intercambiar(&((*m)->vector[j]),&((*m)->vector[i]));
-    } while (j == i);
+        intercambiar(&m->vector[j], &m->vector[i]);
+    } while (j != i);
 }
 
-void crearMonticulo(int v[], int n, pmonticulo* m) {
+int quitarMenor(pmonticulo m){
+    int x;
+    if (MonticuloVacio(m)){
+        printf("Error");
+        exit(EXIT_FAILURE);
+
+    }else{
+        x = m->vector[0];
+        m->vector[0] = m->vector[m->ultimo];
+        m->ultimo = m->ultimo -1 ;
+        if (m->ultimo >= 0)
+            Hundir(m, 0);
+
+    }
+    return x;
+}
+
+void crearMonticulo(const int v[], int n, pmonticulo m) {
     int i;
     for (i = 0; i < n; i++) {
-        (*m)->vector[i] = v[i];
+        m->vector[i] = v[i];
     }
-    (*m)->ultimo = v[i];
-    for (i = (*m)->ultimo / 2; i > 0; i--)
+    m->ultimo = n-1;
+    for (i = (m->ultimo) / 2; i >= 0; i--)
         Hundir(m, i);
 }
+
 void listar_monticulo(int v[],int n){
     int i;
     printf("[");
@@ -68,7 +91,14 @@ void listar_monticulo(int v[],int n){
     }
     printf("]");
 }
-int marMenor(pmonticulo m);
+
+void OrdenarPorMonticulos(int v[], int n, pmonticulo m){
+    int i=0;
+    crearMonticulo(v, n, m);
+    for(i=n-1;i<n;i++)
+        v[i]=quitarMenor(m);
+}
+
 
 double microsegundos(){
     struct timeval t;
@@ -89,17 +119,37 @@ void aleatorio(int v[],int n){
         v[i]= (rand()%m)-n; //se generan numeros pseudoaleatorios entre -n y +n
     }
 }
+bool test(const int vector[], int ultimo) {
+    int HijoIzq, HijoDer, i = 0;
+    while (i != ultimo / 2) {
+        HijoIzq = 2 * i + 1;
+        HijoDer = 2 * i + 2;
+        if (vector[HijoIzq] < vector[i] || vector[HijoDer] < vector[i])
+            return false;
+        i++;
+    }
+    return true;
+}
+
+
 
 
 
 int main(){
-    int v[10];
-    int n = 10;
-    inicializar_semilla();
-    aleatorio(v, n);
+    int v[12] = {6, -12, 9, -2, 3, -3, -12, 1, -4, 6, 5, 0};
+    int n = 12;
+    //inicializar_semilla();
+    //aleatorio(v, n);
+    listar_monticulo(v, n);
+    printf("\n");
     pmonticulo m;
     inicializarMonticulo(&m);
-    crearMonticulo(v, n,&m);
-    listar_monticulo(m->vector, m->ultimo);
+    printf(test(v, n-1)? "Yes\n":"No\n");
+    crearMonticulo(v, n,m);
+    printf(test(m->vector, m->ultimo)? "Yes\n":"No\n");
+    listar_monticulo(m->vector, m->ultimo+1);
+    printf("\n");
+    quitarMenor(m);
+    listar_monticulo(m->vector, m->ultimo+1);
     return 0;
 }
