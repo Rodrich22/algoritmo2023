@@ -91,7 +91,7 @@ void ordenacionShell(int v[], int n) {
 }
 
 void calcularCotas(double *cInf,double *cota,double *cSup, double x, double y,
-                   double z, int n, int t) {
+                   double z, double n, double t) {
     *cInf = t / pow(n, x);
     *cota = t / pow(n, y);
     *cSup = t / pow(n, z);
