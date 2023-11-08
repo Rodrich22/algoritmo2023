@@ -63,7 +63,7 @@ void inicializarMonticulo(pmonticulo* m){
         (*m)->ultimo = 0;
 }
 bool MonticuloVacio(pmonticulo m){
-    return m->ultimo == 0;
+    return m->ultimo < 0;
 }
 void intercambiar(int* x , int* y){
     int tmp;
@@ -79,7 +79,7 @@ void intercambiar(int* x , int* y){
 }
  */
 
-void Hundir (pmonticulo m , int i){
+void Hundir (pmonticulo* m , int i){
     int j;
     int HijoIzq;
     int HijoDer;
@@ -87,39 +87,39 @@ void Hundir (pmonticulo m , int i){
         HijoIzq = 2*i+1;
         HijoDer = 2*i+2;
         j = i;
-        if(HijoDer <= m->ultimo && m->vector[HijoDer] < m->vector[i])
+        if(HijoDer <= (*m)->ultimo && (*m)->vector[HijoDer] < (*m)->vector[i])
             i = HijoDer;
-        if(HijoIzq <= m->ultimo && m->vector[HijoIzq] < m->vector[i]){
+        if(HijoIzq <= (*m)->ultimo && (*m)->vector[HijoIzq] < (*m)->vector[i]){
             i = HijoIzq;
         }
-        intercambiar(&m->vector[j], &m->vector[i]);
+        intercambiar(&((*m)->vector[j]), &((*m)->vector[i]));
     } while (j != i);
 }
 
-int quitarMenor(pmonticulo m){
+int quitarMenor(pmonticulo* m){
     int x;
-    if (MonticuloVacio(m)){
+    if (MonticuloVacio(*m)){
         printf("Monticulo vacio\n");
         exit(EXIT_FAILURE);
 
     }else{
-        x = m->vector[0];
-        m->vector[0] = m->vector[m->ultimo];
-        m->ultimo-- ;
-        if (m->ultimo >= 0)
+        x = (*m)->vector[0];
+        (*m)->vector[0] = (*m)->vector[(*m)->ultimo];
+        (*m)->ultimo--;
+        if ((*m)->ultimo >= 0)
             Hundir(m, 0);
 
     }
     return x;
 }
 
-void crearMonticulo(const int v[], int n, pmonticulo m) {
+void crearMonticulo(const int v[], int n, pmonticulo* m) {
     int i;
     for (i = 0; i < n; i++) {
-        m->vector[i] = v[i];
+        (*m)->vector[i] = v[i];
     }
-    m->ultimo = n-1;
-    for (i = (m->ultimo) / 2; i >= 0; i--)
+    (*m)->ultimo = n-1;
+    for (i = ((*m)->ultimo) / 2; i >= 0; i--)
         Hundir(m, i);
 }
 
@@ -133,15 +133,16 @@ void listar_vector(int v[],int n){
     printf("]");
 }
 
-void OrdenarPorMonticulos(int v[], int n){//preguntar
-    pmonticulo m;
+void OrdenarPorMonticulos(int v[], int n){
+    pmonticulo M;
 
     int i;
-    inicializarMonticulo(&m);
-    crearMonticulo(v, n, m);
+    inicializarMonticulo(&M);
+    crearMonticulo(v, n, &M);
     for(i=0;i<n;i++) {
-        v[i] = quitarMenor(m);
+        v[i] = quitarMenor(&M);
     }
+    free(M);
 }
 
 
@@ -166,7 +167,7 @@ void calcularCotas(double *cInf,double *cota,double *cSup, double x, double y,
     }
     else{
         *cInf = t / pow(n, x);
-        *cota = t / n * log(n);
+        *cota = t / (n * log(n));
         *cSup = t / pow(n, z);
     }
 }
@@ -182,14 +183,14 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-/*void imprimirTitulo(double inf, double fij, double sup, enum ordenaciones ord
+/*void imprimirTitulo(double inf, double fij, double sup, enum FUNCION ord
         , enum inicializaciones in) {
 
     char s[45];
     char t[] = "t(n)";
     char cotas_exp[] = "t(n) /n^";
-    if (ord == INSERCION)
-        strcpy(s, "Ordenacion por insercion con inicializacion ");
+    if (ord == CREAR)
+        strcpy(s, " CREAR ");
     else
         strcpy(s, "Ordenacion shell con inicializacion ");
 
@@ -201,41 +202,30 @@ void imprimirFila(int k, int n, double t,
     printf("%15s%.2f%15s%.2f%15s%.2f%5s\n", cotas_exp, inf,cotas_exp,
            fij, cotas_exp, sup,"K");
 }
- */
+*/
 
-/*void ordenar(int v[], int n, enum ordenaciones ord){
-    listar_vector(v, n);
-    printf("\nordenado? %d\n", esOrdenado(v, n));
-    if(ord == INSERCION){
-        printf("\nOrdenacion por insercion\n");
-        ord_ins(v, n);
-    }
-    else {
-        printf("\nOrdenacion shell\n");
-        ordenacionShell(v, n);
-    }
-    listar_vector(v, n);
-    printf("\nordenado? %d\n\n", esOrdenado(v, n));
-}
- */
 
 double menor500(void (*inicializacion) (int[], int),
-                enum FUNCION funcion, int n, int v[], pmonticulo M) {
+                enum FUNCION funcion, int n, int v[]) {
     double ta, tb, t1, t2, t;
     int k, K = 1000;
-    ta = microsegundos();
+    pmonticulo M;
+    inicializarMonticulo(&M);
     if (funcion == ORDENAR) {
+        ta = microsegundos();
         for (k = 0; k < K; k++) {
             inicializacion(v, n);
             OrdenarPorMonticulos(v, n);
         }
-    } else {
+    }
+    else {
+        ta = microsegundos();
         for (k = 0; k < K; k++) {
-            crearMonticulo(v, n, M);
+            crearMonticulo(v, n, &M);
         }
     }
     tb = microsegundos();
-    if (funcion == CREAR) {
+    if (funcion == ORDENAR) {
         t1 = tb - ta;
         ta = microsegundos();
         for (k = 0; k < K; k++)
@@ -243,7 +233,8 @@ double menor500(void (*inicializacion) (int[], int),
         tb = microsegundos();
         t2 = tb - ta;
         t = (t1 - t2) / K;
-    } else
+    }
+    else
         t = (tb - ta) / K;
     return t;
 }
@@ -262,21 +253,25 @@ void ord (void (*inicializacion) (int[], int),
     //imprimirTitulo(x, y, z, ord, in);
     for (i = 0; i <=m; i++,n *= 2){
         inicializacion(v,n);
-        t1 = microsegundos();
-        if(op == CREAR)
-            crearMonticulo(v, n, M);
-        else
+        if(op == CREAR) {
+            t1 = microsegundos();
+            crearMonticulo(v, n, &M);
+        }
+        else {
+            t1 = microsegundos();
             OrdenarPorMonticulos(v, n);
+        }
         t2 = microsegundos();
         t = t2 - t1;
         if (t < 500.0){
-            t = menor500(inicializacion, op, n, v, M);
+            t = menor500(inicializacion, op, n, v);
             tmenor500 = 1;
         }
         calcularCotas(&cInf, &cota, &cSup, x, y, z, n, t, op);
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
+    free(M);
 }
 bool esOrdenado(const int v[], int n){
     int i;
@@ -299,7 +294,8 @@ void test(){
     int v[n];
     pmonticulo M;
     inicializarMonticulo(&M);
-    crearMonticulo(v, n, M);
+    aleatorio(v, n);
+    crearMonticulo(v, n, &M);
     printf(esMonticulo(M->vector, M->ultimo)? "El monticulo se ha creado correctamente\n":"El monticulo no se ha creado correctamente\n");
     printf("Inicializacion aleatoria\n");
     aleatorio(v, n);
@@ -310,6 +306,7 @@ void test(){
     printf("Inicializacion descendente\n");
     descendente(v, n);
     ordenar(v, n);
+    free(M);
 }
 
 int main(){
@@ -320,13 +317,19 @@ int main(){
     pmonticulo M;
     //test();
 
-    for (i = 0; i <3; i++) {
-        ord(descendente, CREAR, DESCENDENTE, 0.8, 1.0, 1.2);
-        ord(ascendente, CREAR, ASCENDENTE, 0.8, 1.0, 1.2);
+    for (i = 0; i < 3; i++) {
+        printf("crear Descendente\n");
+        ord(descendente, CREAR, DESCENDENTE, 0.7, 1.0, 1.3);
+        printf("crear ascendente\n");
+        ord(ascendente, CREAR, ASCENDENTE, 0.7, 1.0, 1.3);
+        printf("crear aleatorio\n");
         ord(aleatorio, CREAR, ALEATORIO, 0.8, 1.0, 1.2);
-        ord(descendente, ORDENAR, DESCENDENTE, 0.8, 1.0, 1.2);
-        ord(ascendente, ORDENAR, ASCENDENTE, 0.8, 1.0, 1.2);
-        ord(aleatorio, ORDENAR, ALEATORIO, 0.8, 1.0, 1.2);
+        printf("ordenar descendente\n");
+        ord(descendente, ORDENAR, DESCENDENTE, 0.9, 1.0, 1.5);
+        printf("ordenar ascendente\n");
+        ord(ascendente, ORDENAR, ASCENDENTE, 0.9, 1.0, 1.5);
+        printf("ordenar aleatorio\n");
+        ord(aleatorio, ORDENAR, ALEATORIO, 0.9, 1.0, 1.5);
     }
     return 0;
 }

@@ -105,7 +105,7 @@ int quitarMenor(pmonticulo m){
     }else{
         x = m->vector[0];
         m->vector[0] = m->vector[m->ultimo];
-        m->ultimo-- ;
+        m->ultimo--;
         if (m->ultimo >= 0)
             Hundir(m, 0);
 
