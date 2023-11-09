@@ -5,7 +5,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
-#include <stdarg.h>
+
 #define TAM 256000
 
 struct monticulo{
@@ -71,13 +71,6 @@ void intercambiar(int* x , int* y){
     *x = *y;
     *y = tmp;
 }
-/*void Flotar (pmonticulo m, int i) {
-    while (i > 0 && m->vector[i / 2] < m->vector[i]) {
-        intercambiar(&m->vector[i / 2], &m->vector[i]);
-        i /= 2;
-    }
-}
- */
 
 void Hundir (pmonticulo* m , int i){
     int j;
@@ -145,8 +138,6 @@ void OrdenarPorMonticulos(int v[], int n){
     free(M);
 }
 
-
-
 bool esMonticulo(const int vector[], int ultimo) {
     int HijoIzq, HijoDer, i = 0;
     while (i != ultimo / 2) {
@@ -183,26 +174,36 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
-/*void imprimirTitulo(double inf, double fij, double sup, enum FUNCION ord
-        , enum inicializaciones in) {
+void imprimirTitulo(double inf, double fij, double sup, enum FUNCION op
+        , enum INICIALIZAR in) {
 
-    char s[45];
+    char s[46];
     char t[] = "t(n)";
     char cotas_exp[] = "t(n) /n^";
-    if (ord == CREAR)
-        strcpy(s, " CREAR ");
+    char cotas_log[] = "t(n) / n log n";
+
+    if (op == CREAR)
+        strcpy(s, " Crear monticulo con inicializacion ");
     else
-        strcpy(s, "Ordenacion shell con inicializacion ");
+        strcpy(s, " Ordenacion por monticulo con inicializacion ");
 
     printf("\n%*s%*s%*s%*s\n", 22, "", 40, s, 0,
            in == ALEATORIO ? "aleatoria" : in == ASCENDENTE ?
                                            "ascendente" : "descendente", 10, "");
+    printf("\n");
+
     printf("%12s%15s", "n", t);
 
-    printf("%15s%.2f%15s%.2f%15s%.2f%5s\n", cotas_exp, inf,cotas_exp,
-           fij, cotas_exp, sup,"K");
+    printf("%15s%.2f", cotas_exp, inf);
+    if(op == CREAR)
+        printf("%15s%.2f", cotas_exp, fij);
+    else
+        printf("%19s%s", cotas_log, "");
+
+    printf("%15s%.2f%5s\n", cotas_exp, sup,"K");
+
 }
-*/
+
 
 
 double menor500(void (*inicializacion) (int[], int),
@@ -247,10 +248,10 @@ void ord (void (*inicializacion) (int[], int),
     int v[TAM];
     pmonticulo M;
     double t, t1, t2,cInf=0, cota=0, cSup=0;
-    int tmenor500 = 0,m=6,i;
+    int tmenor500 = 0,m=9,i;
     inicializarMonticulo(&M);
 
-    //imprimirTitulo(x, y, z, ord, in);
+    imprimirTitulo(x, y, z, op, in);
     for (i = 0; i <=m; i++,n *= 2){
         inicializacion(v,n);
         if(op == CREAR) {
@@ -312,23 +313,14 @@ void test(){
 int main(){
     int i;
     inicializar_semilla();
-    int v[TAM];
-    int n;
-    pmonticulo M;
     //test();
 
     for (i = 0; i < 3; i++) {
-        printf("crear Descendente\n");
         ord(descendente, CREAR, DESCENDENTE, 0.7, 1.0, 1.3);
-        printf("crear ascendente\n");
         ord(ascendente, CREAR, ASCENDENTE, 0.7, 1.0, 1.3);
-        printf("crear aleatorio\n");
         ord(aleatorio, CREAR, ALEATORIO, 0.8, 1.0, 1.2);
-        printf("ordenar descendente\n");
         ord(descendente, ORDENAR, DESCENDENTE, 0.9, 1.0, 1.5);
-        printf("ordenar ascendente\n");
         ord(ascendente, ORDENAR, ASCENDENTE, 0.9, 1.0, 1.5);
-        printf("ordenar aleatorio\n");
         ord(aleatorio, ORDENAR, ALEATORIO, 0.9, 1.0, 1.5);
     }
     return 0;
