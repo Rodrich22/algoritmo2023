@@ -237,6 +237,7 @@ double menor500(void (*inicializacion) (int[], int),
     }
     else
         t = (tb - ta) / K;
+    free(M);
     return t;
 }
 
