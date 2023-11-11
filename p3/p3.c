@@ -94,14 +94,12 @@ int quitarMenor(pmonticulo* m){
     if (MonticuloVacio(*m)){
         printf("Monticulo vacio\n");
         exit(EXIT_FAILURE);
-
     }else{
         x = (*m)->vector[0];
         (*m)->vector[0] = (*m)->vector[(*m)->ultimo];
         (*m)->ultimo--;
         if ((*m)->ultimo >= 0)
             Hundir(m, 0);
-
     }
     return x;
 }
@@ -128,7 +126,6 @@ void listar_vector(int v[],int n){
 
 void OrdenarPorMonticulos(int v[], int n){
     pmonticulo M;
-
     int i;
     inicializarMonticulo(&M);
     crearMonticulo(v, n, &M);
@@ -189,7 +186,7 @@ void imprimirTitulo(double inf, double fij, double sup, enum FUNCION op
 
     printf("\n%*s%*s%*s%*s\n", 22, "", 40, s, 0,
            in == ALEATORIO ? "aleatoria" : in == ASCENDENTE ?
-                                           "ascendente" : "descendente", 10, "");
+                             "ascendente" : "descendente", 10, "");
     printf("\n");
 
     printf("%12s%15s", "n", t);
@@ -275,9 +272,10 @@ void ord (void (*inicializacion) (int[], int),
     }
     free(M);
 }
+
 bool esOrdenado(const int v[], int n){
     int i;
-    for(i = 0; i < n; i++){
+    for(i = 0; i < n-1; i++){
         if(v[i] > v[i+1])
             return false;
     }
@@ -298,7 +296,9 @@ void test(){
     inicializarMonticulo(&M);
     aleatorio(v, n);
     crearMonticulo(v, n, &M);
-    printf(esMonticulo(M->vector, M->ultimo)? "El monticulo se ha creado correctamente\n":"El monticulo no se ha creado correctamente\n");
+    printf(esMonticulo(M->vector, M->ultimo)? 
+    "El monticulo se ha creado correctamente\n":
+    "El monticulo no se ha creado correctamente\n");
     printf("Inicializacion aleatoria\n");
     aleatorio(v, n);
     ordenar(v, n);
@@ -315,12 +315,11 @@ int main(){
     int i;
     inicializar_semilla();
     //test();
-
     for (i = 0; i < 3; i++) {
         ord(descendente, CREAR, DESCENDENTE, 0.7, 1.0, 1.3);
         ord(ascendente, CREAR, ASCENDENTE, 0.7, 1.0, 1.3);
         ord(aleatorio, CREAR, ALEATORIO, 0.8, 1.0, 1.2);
-        ord(descendente, ORDENAR, DESCENDENTE, 0.9, 1.0, 1.5);
+        ord(descendente, ORDENAR, DESCENDENTE, 0.93, 1.0, 1.5);
         ord(ascendente, ORDENAR, ASCENDENTE, 0.9, 1.0, 1.5);
         ord(aleatorio, ORDENAR, ALEATORIO, 0.9, 1.0, 1.5);
     }

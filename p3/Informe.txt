@@ -1,0 +1,165 @@
+Titulo: Algoritmos Práctica 3
+
+Integrantes: 
+	     -Antaya huamani, Ney Abraham Rodrich
+	     -Rivera Bonilla, Daniel
+	     -Correa Blanco, Hugo
+Grupo : 1.2
+Fecha :11/11/2023
+
+Introducción: 
+Se ha realizado un informe con el objetivo de demostrar que la complejidad computacional de la 
+operación crearMonticulo se ejecuta en un tiempo O(n) para un vector cualquiera, y el de medir 
+la complejidad computacional de un algoritmo de ordenación por montículos, probando para ello 
+tres inicializaciones distintas: Un vector con inicialización aleatoria, un vector ordenado 
+ascendentemente, lo que supondría el mejor caso para un algortimo de ordenación; y un vector 
+ordenado descendentemente, lo que supondría el peor caso.
+Para ello, se han examinado en repetidas ejecuciones y se ha seleccionado el mejor caso 
+para cada algoritmo, usando como criterio el número de anomalías en sus iteraciones y 
+la duración de sus tiempos de ejecución. A raíz de las medidas, se ha realizado una 
+comprobación empírica utilizando una cota ligeramente subestimada, una ajustada y otra 
+ligeramente sobrestimada. A modo de contextualización, se ha de comentar que la medición 
+de los tiempos se ha realizado desde un ordenador con las siguientes características:
+
+    Nombre del modelo: Nitro 5 AN515-57
+    Número de referencia : NH.QBUEB.003
+    Fabricante del procesador : Intel® 
+    Tipo de procesador: Core™ i7 de 11.a generación
+    Modelo de procesador: i7-11800H
+    Velocidad del Procesador: 2,30 GHz
+    Núcleo de procesador: Octa-Core (8 núcleos)
+    Memoria total del sistema instalado: 16 Gb
+    Tecnologìa de memoria del sistema: DDR4 SDRAM
+    Nombre del SO: Ubuntu 22.04.1 LTS
+    Tipo de SO: 64 bits
+    Compilador utilizado: gcc - GNU project C and C++ compiler
+
+	
+    Tras examinar los algoritmos usando una progresión geométrica de razón dos para el tamaño de
+    las entradas, se han obtenido los siguientes resultados:
+    
+                             Crear monticulo con inicializacion descendente          
+
+           n           t(n)       t(n) /n^0.70       t(n) /n^1.00       t(n) /n^1.30    K
+         500          5.629           0.072636           0.011258           0.001745    *
+        1000         11.113           0.088274           0.011113           0.001399    *
+        2000         21.618           0.105705           0.010809           0.001105    *
+        4000         44.429           0.133729           0.011107           0.000923    *
+        8000         88.480           0.163939           0.011060           0.000746    *
+       16000        178.336           0.203402           0.011146           0.000611    *
+       32000        353.151           0.247945           0.011036           0.000491    *
+       64000        724.000           0.312905           0.011312           0.000409    -
+      128000       1516.000           0.403322           0.011844           0.000348    -
+      256000       2892.000           0.473620           0.011297           0.000269    -
+       
+                                   -La cota ajustada tiende a 0.011
+                                    
+    Para Crear montículo:
+    	-Con inicialización descendente, se han hallado las siguientes cotas:
+		-Cota subestimada: n^0.70
+		-Cota ajustada: n^1.00
+		-Cota sobreestimada: n^1.30
+		
+       
+                      Ordenacion por monticulo con inicializacion descendente          
+
+           n           t(n)       t(n) /n^0.93     t(n) / n log n       t(n) /n^1.50    K
+         500         31.051           0.095947           0.009993           0.002777    *
+        1000         84.449           0.136960           0.012225           0.002671    *
+        2000        195.670           0.166558           0.012871           0.002188    *
+        4000        419.111           0.187246           0.012633           0.001657    *
+        8000        926.000           0.217139           0.012879           0.001294    -
+       16000       1944.000           0.239257           0.012551           0.000961    -
+       32000       4057.000           0.262069           0.012222           0.000709    -
+       64000       8589.000           0.291203           0.012127           0.000530    -
+      128000      17317.000           0.308154           0.011504           0.000378    -
+      256000      36475.000           0.340669           0.011442           0.000282    -
+       
+                                  -La cota ajustada tiende a 0.012
+       
+     Para ordenar montículo:
+	-Con inicialización descendente, se han hallado las siguientes cotas:
+		-Cota subestimada: n^0.93
+		-Cota ajustada: n log n
+		-Cota sobreestimada: n^1.50      
+       
+       
+  
+                       Ordenacion por monticulo con inicializacion ascendente          
+
+           n           t(n)       t(n) /n^0.90     t(n) / n log n       t(n) /n^1.50    K
+         500         27.236           0.101408           0.008765           0.002436    *
+        1000         72.930           0.145514           0.010558           0.002306    *
+        2000        178.195           0.190532           0.011722           0.001992    *
+        4000        401.180           0.229872           0.012092           0.001586    *
+        8000        869.000           0.266833           0.012087           0.001214    -
+       16000       1841.000           0.302932           0.011886           0.000910    -
+       32000       3845.000           0.339048           0.011583           0.000672    -
+       64000       7956.000           0.375952           0.011233           0.000491    -
+      128000      17329.000           0.438818           0.011512           0.000378    -
+      256000      35843.000           0.486394           0.011243           0.000277    -
+       
+                                  -La cota ajustada tiende a 0.011
+       
+       
+       Para ordenar montículo:
+         -Con inicialización ascendente, se han hallado las siguientes cotas: 
+		-Cota subestimada: n^0.90
+		-Cota ajustada: n log n
+		-Cota sobreestimada: n^1.50
+		
+		
+
+                        Ordenacion por monticulo con inicializacion aleatoria          
+
+           n           t(n)       t(n) /n^0.90     t(n) / n log n       t(n) /n^1.50    K
+         500         48.417           0.180271           0.015582           0.004331    *
+        1000        105.105           0.209712           0.015216           0.003324    *
+        2000        230.939           0.246928           0.015192           0.002582    *
+        4000        497.611           0.285125           0.014999           0.001967    *
+        8000       1094.000           0.335920           0.015216           0.001529    -
+       16000       2442.000           0.401826           0.015766           0.001207    -
+       32000       5114.000           0.450947           0.015406           0.000893    -
+       64000      10924.000           0.516202           0.015424           0.000675    -
+      128000      23096.000           0.584854           0.015344           0.000504    -
+      256000      48924.000           0.663905           0.015347           0.000378    -
+       
+                                  -La cota ajustada tiende a 0.015
+       
+      Para ordenar montículo:
+	
+	-Con inicialización aleatoria, se han hallado las siguientes cotas: 
+		-Cota subestimada: n^0.90
+		-Cota ajustada: n log n
+		-Cota sobreestimada: n^1.50
+		
+	
+      Nota: 
+	
+	-Las medidas que figuran en la tabla están en microsegundos(µs).
+	
+	-Las medidas marcadas por un (*) se corresponden con tiempos de
+        ejecución menores de 500 µs, para los cuales se ha empleado la
+        solución de repetir K veces (en este caso 1000)  la iteración 
+        para el caso de crearMontículo; y para el caso de OrdenarMontículo, 
+        como el algoritmo modifica la entrada, se ha empleado la solución 
+        de repetir K veces tanto la inicialización como la ordenación, y 
+        repetir posteriormente K veces la inicialización, para restárselo a 
+        la medida anteriror y conocer lo que tarda únicamente la ordenación.
+       
+        
+Conclusión:     
+        
+        Podemos concluir que los resultados empíricos obtenidos del estudio del algoritmo 
+        "Crear Montículo" con un vector inicializado de forma descendente, son coherentes 
+        con la complejidad teórica que se pide demostrar, es decir, O (n).
+       
+        Basándonos en los resultados que obtuvimos de manera empírica, podemos concluir que
+        el algoritmo de ordenación por montículos tiene una complejidad de O(nlogn) para los
+        tres casos probados,siendo independiente de cualquier vector.
+        También podemos observar, que cuando se usa una inicialización ascendente, el algoritmo
+        es ligeramente más rápido que al usar una descendente.
+        A su vez estas dos inicializaciones son mas rápidas que aleatorio.
+        
+
+	
