@@ -1,3 +1,7 @@
+//Daniel Rivera Bonilla
+//Rodrich Antaya Huamani
+//Hugo Correa Blanco
+
 #include <stdio.h>
 #include <sys/time.h>
 #include <stdlib.h>
@@ -33,6 +37,7 @@ matriz crearMatriz(int n) {
             return NULL;
     return aux;
 }
+
 void iniMatriz(matriz m, int n) {
     int i, j;
     for (i=0; i<n; i++)
@@ -45,49 +50,25 @@ void iniMatriz(matriz m, int n) {
             else
                 m[i][j] = m[j][i];
 }
+
 void liberarMatriz(matriz m, int n) {
     int i;
     for (i=0; i<n; i++)
         free(m[i]);
     free(m);
 }
-void printear_matriz(matriz m, int n){
+
+void printear_matriz(matriz m, int n) {
     int i, j;
-    for(i = 0; i<n;i++){
+    for (i = 0; i < n; i++) {
         printf("\n");
-        for(j = 0; j < n; j++){
+        for (j = 0; j < n; j++) {
             printf("%d\t", m[i][j]);
         }
     }
 }
 
 
-/*void dijkstra (matriz grafo, matriz distancias, int tam) {
-    int n, i, j, w, min, v = 0;
-    int *noVisitados = malloc(tam * sizeof(int));
-    for (n = 0; n < tam; n++) {
-        for (i = 0; i < tam; i++) {
-            noVisitados[i] = 1; //lo marca como no visitado
-            distancias[n][i] = grafo[n][i];
-        }
-        noVisitados[n] = 0;
-        for(j = 0; j < (tam-2); j++){
-            min = TAM_MAX+1;
-            for (i = 0; i < tam; i++) {
-                if (noVisitados[i] && distancias[n][i] < min) {
-                    min = distancias[n][i];
-                    v = i;
-                }
-            }
-            noVisitados[v] = 0;
-            for (w = 0; w < tam; w++) {
-                if (noVisitados[w] && (distancias[n][w] > (distancias[n][v] + grafo[v][w])))
-                    distancias[n][w] = distancias[n][v] + grafo[v][w];
-            }
-        }
-    }
-    free(noVisitados);
-}*/
 
 void dijkstra (matriz grafo, matriz distancias, int tam) {
     int n, i, j, w, min, v = 0;
@@ -118,6 +99,7 @@ void dijkstra (matriz grafo, matriz distancias, int tam) {
     free(noVisitados);
 }
 
+
 void calcularCotas(double *cInf,double *cota,double *cSup, double x, double y,
                    double z, double n, double t) {
     *cInf = t / pow(n, x);
@@ -136,6 +118,7 @@ void imprimirFila(int k, int n, double t,
     printf("%12d%15.3f%19.6f%19.6f%19.6f%5c\n", n, t, cI, c, cS, as);
 }
 
+
 void imprimirTitulo(double inf, double fij, double sup) {
 
     char s[22];
@@ -143,7 +126,8 @@ void imprimirTitulo(double inf, double fij, double sup) {
     char cotas_exp[] = "t(n) /n^";
 
     strcpy(s, "Algoritmo de Dijkstra");
-
+    printf("\n%*s%*s\n", 22, "", 40, s);
+    printf("\n");
     printf("%12s%15s", "n", t);
 
     printf("%15s%.2f%15s%.2f%15s%.2f%5s\n", cotas_exp, inf,cotas_exp,
@@ -152,7 +136,7 @@ void imprimirTitulo(double inf, double fij, double sup) {
 
 
 void grafo (double x, double y, double z){
-    int n = 500;
+    int n = 10;
     double t, t1, t2, cInf=0, cota=0, cSup=0;
     int K = 1000, tmenor500 = 0,k,m=6,i;
     matriz grafo;
@@ -184,121 +168,87 @@ void grafo (double x, double y, double z){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
+void copiar_matriz(matriz grafo, matriz referencia,
+                   int tam, int matriz_grafo [tam][tam], int matriz_referencia[tam][tam]){
+    int i, j;
+    for(i = 0; i < tam; i++){
+        for(j = 0; j < tam; j++){
+            grafo[i][j] = matriz_grafo[i][j];
+            referencia[i][j] = matriz_referencia[i][j];
+        }
+    }
+}
 
 
 bool test(matriz prueba, matriz referencia, int tam){
     int i, j;
-    printf("Matriz antes de aplicar el algoritmo: \n");
+    matriz distancias = crearMatriz(tam);
+    printf("Matriz antes de aplicar el algoritmo: \n\n");
     printear_matriz(prueba, tam);
-    printf("\n");
+    printf("\n\n");
     printf("Matriz referencia de distancias minimas: \n");
     printear_matriz(referencia, tam);
-
+    printf("\n\n");
+    dijkstra(prueba, distancias, tam);
+    printf("Matriz resultante: \n");
+    printear_matriz(distancias, tam);
+    printf("\n\n");
     for(i = 0; i < tam; i++){
         for(j = 0; j < tam; j++){
-            if(prueba[i][j] != referencia[i][j])
+            if(distancias[i][j] != referencia[i][j])
                 return false;
         }
     }
     return true;
 }
-bool testGlobal(){
-    int aux[5][5] = {{0, 1, 8, 4, 7},
-                     {1, 0, 2, 6, 5},
-                     {8, 2, 0, 9, 5},
-                     {4, 6, 9, 0, 3},
-                     {7, 5, 5, 3, 0}};
-    matriz m = crearMatriz(5);
-    matriz ref = crearMatriz(5);
-    matriz d = crearMatriz(5);
+
+
+void testGlobal() {
+
+    int aux1[5][5] = {{0, 1, 8, 4, 7},
+                      {1, 0, 2, 6, 5},
+                      {8, 2, 0, 9, 5},
+                      {4, 6, 9, 0, 3},
+                      {7, 5, 5, 3, 0}};
+
+    int ref1[5][5] = {{0, 1, 3, 4, 6},
+                      {1, 0, 2, 5, 5},
+                      {3, 2, 0, 7, 5},
+                      {4, 5, 7, 0, 3},
+                      {6, 5, 5, 3, 0}};
+    int aux2[4][4] = {{0, 1, 4, 7},
+                      {1, 0, 2, 8},
+                      {4, 2, 0, 3},
+                      {7, 8, 3, 0}};
+
+    int ref2[4][4] = {{0, 1, 3, 6},
+                      {1, 0, 2, 5},
+                      {3, 2, 0, 3},
+                      {6, 5, 3, 0}};
+
+    matriz grafo = crearMatriz(5);
+    matriz referencia = crearMatriz(5);
+    matriz grafo2 = crearMatriz(4);
+    matriz referencia2 = crearMatriz(4);
+
+    copiar_matriz(grafo, referencia, 5, aux1, ref1);
+    printf(test(grafo, referencia, 5) ? "El algoritmo funciona\n\n" : "El algortimo no funciona\n\n");
+    copiar_matriz(grafo2, referencia2, 4, aux2, ref2);
+    printf(test(grafo2, referencia2, 4) ? "El algoritmo funciona\n\n" : "El algortimo no funciona\n\n");
+
+    liberarMatriz(grafo, 5);
+    liberarMatriz(referencia, 5);
+    liberarMatriz(grafo2, 4);
+    liberarMatriz(referencia2, 4);
 }
 
-
 int main(){
-    matriz m = crearMatriz(5);
-    matriz d = crearMatriz(5);
-    matriz ref = crearMatriz(5);
-    m[0][0] = 0;
-    m[0][1] = 1;
-    m[0][2] = 8;
-    m[0][3] = 4;
-    m[0][4] = 7;
-
-    m[1][0] = 1;
-    m[1][1] = 0;
-    m[1][2] = 2;
-    m[1][3] = 6;
-    m[1][4] = 5;
-
-    m[2][0] = 8;
-    m[2][1] = 2;
-    m[2][2] = 0;
-    m[2][3] = 9;
-    m[2][4] = 5;
-
-    m[3][0] = 4;
-    m[3][1] = 6;
-    m[3][2] = 9;
-    m[3][3] = 0;
-    m[3][4] = 3;
-
-    m[4][0] = 7;
-    m[4][1] = 5;
-    m[4][2] = 5;
-    m[4][3] = 3;
-    m[4][4] = 0;
-    printear_matriz(m, 5);
-    printf("\n");
-    dijkstra(m, d, 5);
-    printf("\n");
-    printear_matriz(m, 5);
-    printf("\n\n");
-    printear_matriz(d, 5);
     int i;
     inicializar_semilla();
-    /*for(i = 0; i < 3; i++){
-        grafo(1.8, 2.0, 2.2);
-    }*/
-    m = crearMatriz(5);
-    d = crearMatriz(5);
-    m[0][0] = 0;
-    m[0][1] = 1;
-    m[0][2] = 4;
-    m[0][3] = 7;
-
-    m[1][0] = 1;
-    m[1][1] = 0;
-    m[1][2] = 2;
-    m[1][3] = 8;
-
-    m[2][0] = 4;
-    m[2][1] = 2;
-    m[2][2] = 0;
-    m[2][3] = 3;
-
-    m[3][0] = 7;
-    m[3][1] = 8;
-    m[3][2] = 3;
-    m[3][3] = 0;
-    printf("\n");
-    printear_matriz(m, 4);
-    printf("\n");
-    dijkstra(m, d, 4);
-    printf("\n");
-    printear_matriz(m, 4);
-    printf("\n\n");
-    printear_matriz(d, 4);
+    //testGlobal();
+    for(i = 0; i < 3; i++){
+        grafo(2.8, 3.0, 3.2);
+    }
     return 0;
 }
 
