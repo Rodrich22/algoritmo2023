@@ -60,7 +60,7 @@ void inicializarMonticulo(pmonticulo* m){
         free(m);
     }
     else
-        (*m)->ultimo = 0;
+        (*m)->ultimo = -1;
 }
 bool MonticuloVacio(pmonticulo m){
     return m->ultimo < 0;
