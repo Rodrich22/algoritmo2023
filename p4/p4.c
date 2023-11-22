@@ -62,7 +62,7 @@ void printear_matriz(matriz m, int n){
 }
 
 
-void dijkstra (matriz grafo, matriz distancias, int tam) {
+/*void dijkstra (matriz grafo, matriz distancias, int tam) {
     int n, i, j, w, min, v = 0;
     int *noVisitados = malloc(tam * sizeof(int));
     for (n = 0; n < tam; n++) {
@@ -85,6 +85,35 @@ void dijkstra (matriz grafo, matriz distancias, int tam) {
                     distancias[n][w] = distancias[n][v] + grafo[v][w];
             }
         }
+    }
+    free(noVisitados);
+}*/
+
+void dijkstra (matriz grafo, matriz distancias, int tam) {
+    int n, i, j, w, min, v = 0;
+    int *noVisitados = malloc(tam * sizeof(int));
+    for (n = 0; n < tam; n++) {
+        for (i = 0; i < tam; i++) {
+            noVisitados[i] = 1; //lo marca como no visitado
+            distancias[n][i] = grafo[n][i];
+        }
+        noVisitados[n] = 0;
+        j = 0;
+        do{
+            min = TAM_MAX+1;
+            for (i = 0; i < tam; i++) {
+                if (noVisitados[i] && distancias[n][i] < min) {
+                    min = distancias[n][i];
+                    v = i;
+                }
+            }
+            noVisitados[v] = 0;
+            for (w = 0; w < tam; w++) {
+                if (noVisitados[w] && (distancias[n][w] > (distancias[n][v] + grafo[v][w])))
+                    distancias[n][w] = distancias[n][v] + grafo[v][w];
+            }
+            j++;
+        } while (j < (tam-2));
     }
     free(noVisitados);
 }
@@ -168,7 +197,7 @@ void grafo (double x, double y, double z){
 
 
 
-/*bool test(matriz prueba, matriz referencia, int tam){
+bool test(matriz prueba, matriz referencia, int tam){
     int i, j;
     printf("Matriz antes de aplicar el algoritmo: \n");
     printear_matriz(prueba, tam);
@@ -193,55 +222,83 @@ bool testGlobal(){
     matriz m = crearMatriz(5);
     matriz ref = crearMatriz(5);
     matriz d = crearMatriz(5);
-}*/
+}
 
 
 int main(){
-    /* matriz m = crearMatriz(5);
-     matriz d = crearMatriz(5);
-     matriz ref = crearMatriz(5);
-     m[0][0] = 0;
-     m[0][1] = 1;
-     m[0][2] = 8;
-     m[0][3] = 4;
-     m[0][4] = 7;
+    matriz m = crearMatriz(5);
+    matriz d = crearMatriz(5);
+    matriz ref = crearMatriz(5);
+    m[0][0] = 0;
+    m[0][1] = 1;
+    m[0][2] = 8;
+    m[0][3] = 4;
+    m[0][4] = 7;
 
-     m[1][0] = 1;
-     m[1][1] = 0;
-     m[1][2] = 2;
-     m[1][3] = 6;
-     m[1][4] = 5;
+    m[1][0] = 1;
+    m[1][1] = 0;
+    m[1][2] = 2;
+    m[1][3] = 6;
+    m[1][4] = 5;
 
-     m[2][0] = 8;
-     m[2][1] = 2;
-     m[2][2] = 0;
-     m[2][3] = 9;
-     m[2][4] = 5;
+    m[2][0] = 8;
+    m[2][1] = 2;
+    m[2][2] = 0;
+    m[2][3] = 9;
+    m[2][4] = 5;
 
-     m[3][0] = 4;
-     m[3][1] = 6;
-     m[3][2] = 9;
-     m[3][3] = 0;
-     m[3][4] = 3;
+    m[3][0] = 4;
+    m[3][1] = 6;
+    m[3][2] = 9;
+    m[3][3] = 0;
+    m[3][4] = 3;
 
-     m[4][0] = 7;
-     m[4][1] = 5;
-     m[4][2] = 5;
-     m[4][3] = 3;
-     m[4][4] = 0;
-     printear_matriz(m, 5);
-     printf("\n");
-     dijkstra(m, d, 5);
-     printf("\n");
-     printear_matriz(m, 5);
-     printf("\n\n");
-     printear_matriz(d, 5);
-     dijkstra(m, d, 5);*/
+    m[4][0] = 7;
+    m[4][1] = 5;
+    m[4][2] = 5;
+    m[4][3] = 3;
+    m[4][4] = 0;
+    printear_matriz(m, 5);
+    printf("\n");
+    dijkstra(m, d, 5);
+    printf("\n");
+    printear_matriz(m, 5);
+    printf("\n\n");
+    printear_matriz(d, 5);
     int i;
     inicializar_semilla();
-    for(i = 0; i < 3; i++){
+    /*for(i = 0; i < 3; i++){
         grafo(1.8, 2.0, 2.2);
-    }
+    }*/
+    m = crearMatriz(5);
+    d = crearMatriz(5);
+    m[0][0] = 0;
+    m[0][1] = 1;
+    m[0][2] = 4;
+    m[0][3] = 7;
+
+    m[1][0] = 1;
+    m[1][1] = 0;
+    m[1][2] = 2;
+    m[1][3] = 8;
+
+    m[2][0] = 4;
+    m[2][1] = 2;
+    m[2][2] = 0;
+    m[2][3] = 3;
+
+    m[3][0] = 7;
+    m[3][1] = 8;
+    m[3][2] = 3;
+    m[3][3] = 0;
+    printf("\n");
+    printear_matriz(m, 4);
+    printf("\n");
+    dijkstra(m, d, 4);
+    printf("\n");
+    printear_matriz(m, 4);
+    printf("\n\n");
+    printear_matriz(d, 4);
     return 0;
 }
 
