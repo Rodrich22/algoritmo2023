@@ -138,13 +138,13 @@ void imprimirTitulo(double inf, double fij, double sup) {
 void grafo (double x, double y, double z){
     int n = 10;
     double t, t1, t2, cInf=0, cota=0, cSup=0;
-    int K = 1000, tmenor500 = 0,k,m=6,i;
+    int K = 1000, tmenor500 = 0, k, m=6 ,i;
     matriz grafo;
     matriz distancias;
+    grafo = crearMatriz(640);
+    distancias = crearMatriz(640);
     imprimirTitulo(x, y, z);
     for (i = 0; i <=m; i++,n *= 2){
-        grafo = crearMatriz(n);
-        distancias = crearMatriz(n);
         iniMatriz(grafo, n);
         t1 = microsegundos();
         dijkstra(grafo, distancias, n);
@@ -162,9 +162,9 @@ void grafo (double x, double y, double z){
         calcularCotas(&cInf, &cota, &cSup, x, y, z, n, t );
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
-        liberarMatriz(grafo, n);
-        liberarMatriz(distancias, n);
     }
+    liberarMatriz(grafo, 640);
+    liberarMatriz(distancias, 640);
 }
 
 
@@ -199,6 +199,7 @@ bool test(matriz prueba, matriz referencia, int tam){
                 return false;
         }
     }
+    liberarMatriz(distancias, tam);
     return true;
 }
 
@@ -247,8 +248,9 @@ int main(){
     inicializar_semilla();
     //testGlobal();
     for(i = 0; i < 3; i++){
-        grafo(2.8, 3.0, 3.2);
+        grafo(2.8, 2.87, 3.2);
     }
+    printf("\n");
     return 0;
 }
 
