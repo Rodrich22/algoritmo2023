@@ -136,9 +136,9 @@ void imprimirTitulo(double inf, double fij, double sup) {
 
 
 void grafo (double x, double y, double z){
-    int n = 10;
+    int n = 20;
     double t, t1, t2, cInf=0, cota=0, cSup=0;
-    int K = 1000, tmenor500 = 0, k, m=6 ,i;
+    int K = 1000, tmenor500 = 0, k, m=5 ,i;
     matriz grafo;
     matriz distancias;
     grafo = crearMatriz(640);
@@ -195,8 +195,10 @@ bool test(matriz prueba, matriz referencia, int tam){
     printf("\n\n");
     for(i = 0; i < tam; i++){
         for(j = 0; j < tam; j++){
-            if(distancias[i][j] != referencia[i][j])
+            if(distancias[i][j] != referencia[i][j]) {
+                liberarMatriz(distancias, tam);
                 return false;
+            }
         }
     }
     liberarMatriz(distancias, tam);
