@@ -1,0 +1,83 @@
+Titulo: Algoritmos Práctica 4
+
+Integrantes: 
+	     -Antaya huamani, Ney Abraham Rodrich
+	     -Rivera Bonilla, Daniel
+	     -Correa Blanco, Hugo
+Grupo : 1.2
+Fecha :25/11/2023
+
+Introducción: 
+Se ha realizado un informe con el objetivo de calcular empíricamente la complejidad computacional 
+del algoritmo de Dijkstra para el cálculo de distancias mínimas, probando con vectores inicializados 
+de forma aleatoria y cuyo tamaño sigue una progresión geométrica de razón 2.
+Para ello, se ha examinado en repetidas ejecuciones y se ha seleccionado el mejor caso, cuidando 
+que el número de anomalías fuese mínimo. A raíz de las medidas, se ha realizado una 
+comprobación empírica utilizando una cota ligeramente subestimada, una ajustada y otra 
+ligeramente sobrestimada. A modo de contextualización, se ha de comentar que la medición 
+de los tiempos se ha realizado desde un ordenador con las siguientes características:Se ha realizado
+un informe con el objetivo de calcular empíricamente la complejidad computacional del algoritmo de 
+Dijkstra para el cálculo de distancias mínimas, probando con vectores inicializados de forma aleatoria
+y cuyo tamaño sigue una progresión geométrica de razón 2.
+Para ello, se ha examinado en repetidas ejecuciones y se ha seleccionado el mejor caso, cuidando que 
+el número de anomalías fuese mínimo. A raíz de las medidas, se ha realizado una 
+comprobación empírica utilizando una cota ligeramente subestimada, una ajustada y otra 
+ligeramente sobrestimada. A modo de contextualización, se ha de comentar que la medición 
+de los tiempos se ha realizado desde un ordenador con las siguientes características:
+
+    Nombre del modelo: Nitro 5 AN515-57
+    Número de referencia : NH.QBUEB.003
+    Fabricante del procesador : Intel® 
+    Tipo de procesador: Core™ i7 de 11.a generación
+    Modelo de procesador: i7-11800H
+    Velocidad del Procesador: 2,30 GHz
+    Núcleo de procesador: Octa-Core (8 núcleos)
+    Memoria total del sistema instalado: 16 Gb
+    Tecnologìa de memoria del sistema: DDR4 SDRAM
+    Nombre del SO: Ubuntu 22.04.1 LTS
+    Tipo de SO: 64 bits
+    Compilador utilizado: gcc - GNU project C and C++ compiler
+
+    Se han obtenido los siguientes resultados:
+    
+                                         Algoritmo de Dijkstra
+
+           n           t(n)       t(n) /n^2.55       t(n) /n^2.78       t(n) /n^3.00    K
+          10          9.795           0.027606           0.016107           0.009795    *
+          20         73.192           0.035224           0.017474           0.009149    *
+          40        511.000           0.041992           0.017713           0.007984    -
+          80       3744.000           0.052536           0.018842           0.007313    -
+         160      22551.000           0.054033           0.016478           0.005506    -
+         320     153610.000           0.062847           0.016296           0.004688    -
+         640    1093107.000           0.076367           0.016837           0.004170    -
+       
+   
+		-Cota subestimada: n^2.55
+		-Cota ajustada: n^2.78 
+		-Cota sobreestimada: n^3.00
+		
+	
+      Nota: 
+	
+	-Las medidas que figuran en la tabla están en microsegundos(µs).
+	
+	-Las medidas marcadas por un (*) se corresponden con tiempos de
+        ejecución menores de 500 µs, para los cuales se ha empleado la solución
+        de repetir K veces (en este caso 1000) tanto la inicialización como el 
+        algoritmo, y repetir posteriormente K veces la inicialización, para restárselo a 
+        la medida anteriror y conocer lo que tarda únicamente el algoritmo. 
+       
+        
+Conclusión:     
+
+	El análisis del algoritmo de Dijkstra muestra un comportamiento eficiente en la 
+        resolución de problemas de caminos más cortos. Los resultados empíricos muestran un
+        crecimiento del tiempo de ejecución que se ajusta cercanamente a una complejidad 
+        de O(n^2.78) , distando de la complejidad teórica de O(n²). La cota ajustada de 
+        n^2.78 se presenta como una estimación más precisa del rendimiento del algoritmo 
+        en comparación con las cotas subestimada y sobreestimada.
+	
+	
+        
+
+	
