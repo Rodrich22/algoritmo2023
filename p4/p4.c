@@ -11,6 +11,7 @@
 #include <stdbool.h>
 
 #define TAM_MAX 1000
+#define V 640
 
 typedef int** matriz;
 
@@ -75,7 +76,7 @@ void dijkstra (matriz grafo, matriz distancias, int tam) {
     int *noVisitados = malloc(tam * sizeof(int));
     for (n = 0; n < tam; n++) {
         for (i = 0; i < tam; i++) {
-            noVisitados[i] = 1; //lo marca como no visitado
+            noVisitados[i] = 1;
             distancias[n][i] = grafo[n][i];
         }
         noVisitados[n] = 0;
@@ -90,8 +91,9 @@ void dijkstra (matriz grafo, matriz distancias, int tam) {
             }
             noVisitados[v] = 0;
             for (w = 0; w < tam; w++) {
-                if (noVisitados[w] && (distancias[n][w] > (distancias[n][v] + grafo[v][w])))
-                    distancias[n][w] = distancias[n][v] + grafo[v][w];
+                if (noVisitados[w] && (distancias[n][w] > 
+                   (distancias[n][v] + grafo[v][w])))
+                   distancias[n][w] = distancias[n][v] + grafo[v][w];
             }
             j++;
         } while (j < (tam-2));
@@ -136,40 +138,49 @@ void imprimirTitulo(double inf, double fij, double sup) {
 
 
 void grafo (double x, double y, double z){
-    int n = 20;
-    double t, t1, t2, cInf=0, cota=0, cSup=0;
-    int K = 1000, tmenor500 = 0, k, m=5 ,i;
+    int n = 10;
+    double t, t1, t2, ta,tb ,cInf=0, cota=0, cSup=0;
+    int K = 1000, tmenor500 = 0, k, m=6 ,i;
     matriz grafo;
     matriz distancias;
-    grafo = crearMatriz(640);
-    distancias = crearMatriz(640);
+    grafo = crearMatriz(V);
+    distancias = crearMatriz(V);
     imprimirTitulo(x, y, z);
     for (i = 0; i <=m; i++,n *= 2){
         iniMatriz(grafo, n);
-        t1 = microsegundos();
+        ta = microsegundos();
         dijkstra(grafo, distancias, n);
-        t2 = microsegundos();
-        t = t2 - t1;
+        tb = microsegundos();
+        t = tb - ta;
         if (t < 500.0){
-            t1 = microsegundos();
+            ta = microsegundos();
             for (k = 0; k < K; k++){
+                iniMatriz(grafo,n);
                 dijkstra(grafo, distancias, n);
             }
-            t2 = microsegundos();
-            t = (t2-t1) / K;
+            tb = microsegundos();
+            t1 = tb-ta;
+            ta = microsegundos();
+            for ( k = 0; k < K ; k++) {
+                iniMatriz(grafo,n);
+            }
+            tb = microsegundos();
+            t2 = tb-ta;
+            t = (t1-t2) / K;
             tmenor500 = 1;
         }
         calcularCotas(&cInf, &cota, &cSup, x, y, z, n, t );
         imprimirFila(tmenor500, n, t, cInf, cota, cSup);
         tmenor500 = 0;
     }
-    liberarMatriz(grafo, 640);
-    liberarMatriz(distancias, 640);
+    liberarMatriz(grafo, V);
+    liberarMatriz(distancias, V);
 }
 
 
 void copiar_matriz(matriz grafo, matriz referencia,
-                   int tam, int matriz_grafo [tam][tam], int matriz_referencia[tam][tam]){
+                   int tam, int matriz_grafo [tam][tam], 
+                   int matriz_referencia[tam][tam]){
     int i, j;
     for(i = 0; i < tam; i++){
         for(j = 0; j < tam; j++){
@@ -195,8 +206,8 @@ bool test(matriz prueba, matriz referencia, int tam){
     printf("\n\n");
     for(i = 0; i < tam; i++){
         for(j = 0; j < tam; j++){
-            if(distancias[i][j] != referencia[i][j]) {
-                liberarMatriz(distancias, tam);
+            if(distancias[i][j] != referencia[i][j]){
+                liberarMatriz(distancias,tam);
                 return false;
             }
         }
@@ -235,9 +246,11 @@ void testGlobal() {
     matriz referencia2 = crearMatriz(4);
 
     copiar_matriz(grafo, referencia, 5, aux1, ref1);
-    printf(test(grafo, referencia, 5) ? "El algoritmo funciona\n\n" : "El algortimo no funciona\n\n");
+    printf(test(grafo, referencia, 5) ? "El algoritmo funciona\n\n" :
+                                        "El algortimo no funciona\n\n");
     copiar_matriz(grafo2, referencia2, 4, aux2, ref2);
-    printf(test(grafo2, referencia2, 4) ? "El algoritmo funciona\n\n" : "El algortimo no funciona\n\n");
+    printf(test(grafo2, referencia2, 4) ? "El algoritmo funciona\n\n" :
+                                          "El algortimo no funciona\n\n");
 
     liberarMatriz(grafo, 5);
     liberarMatriz(referencia, 5);
@@ -250,7 +263,7 @@ int main(){
     inicializar_semilla();
     //testGlobal();
     for(i = 0; i < 3; i++){
-        grafo(2.8, 2.87, 3.2);
+        grafo(2.55, 2.784, 3.0);
     }
     printf("\n");
     return 0;
