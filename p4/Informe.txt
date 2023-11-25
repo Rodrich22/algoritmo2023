@@ -15,14 +15,6 @@ Para ello, se ha examinado en repetidas ejecuciones y se ha seleccionado el mejo
 que el número de anomalías fuese mínimo. A raíz de las medidas, se ha realizado una 
 comprobación empírica utilizando una cota ligeramente subestimada, una ajustada y otra 
 ligeramente sobrestimada. A modo de contextualización, se ha de comentar que la medición 
-de los tiempos se ha realizado desde un ordenador con las siguientes características:Se ha realizado
-un informe con el objetivo de calcular empíricamente la complejidad computacional del algoritmo de 
-Dijkstra para el cálculo de distancias mínimas, probando con vectores inicializados de forma aleatoria
-y cuyo tamaño sigue una progresión geométrica de razón 2.
-Para ello, se ha examinado en repetidas ejecuciones y se ha seleccionado el mejor caso, cuidando que 
-el número de anomalías fuese mínimo. A raíz de las medidas, se ha realizado una 
-comprobación empírica utilizando una cota ligeramente subestimada, una ajustada y otra 
-ligeramente sobrestimada. A modo de contextualización, se ha de comentar que la medición 
 de los tiempos se ha realizado desde un ordenador con las siguientes características:
 
     Nombre del modelo: Nitro 5 AN515-57
@@ -73,7 +65,7 @@ Conclusión:
 	El análisis del algoritmo de Dijkstra muestra un comportamiento eficiente en la 
         resolución de problemas de caminos más cortos. Los resultados empíricos muestran un
         crecimiento del tiempo de ejecución que se ajusta cercanamente a una complejidad 
-        de O(n^2.78) , distando de la complejidad teórica de O(n²). La cota ajustada de 
+        de O(n^2.78), distando de la complejidad teórica de O(n²). La cota ajustada de 
         n^2.78 se presenta como una estimación más precisa del rendimiento del algoritmo 
         en comparación con las cotas subestimada y sobreestimada.
 	
